@@ -1,0 +1,498 @@
+/* Custom CSS for EcoPontos - Premium & Accessible Design */
+
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Montserrat:wght@600;700;800&display=swap');
+
+:root {
+    --bg-primary: #0f172a; /* Slate 900 */
+    --bg-secondary: #1e293b; /* Slate 800 */
+    --bg-card: rgba(30, 41, 59, 0.7);
+    --border-color: rgba(255, 255, 255, 0.08);
+    --text-primary: #f8fafc;
+    --text-secondary: #94a3b8;
+    
+    /* Vibrant Eco Palette */
+    --accent-color: #10b981; /* Emerald 500 */
+    --accent-hover: #059669; /* Emerald 600 */
+    --accent-rgb: 16, 185, 129;
+    --warning-color: #f59e0b; /* Amber 500 */
+    --danger-color: #ef4444; /* Red 500 */
+    
+    /* Base Font Size for accessibility adjustments */
+    --font-scale: 100%;
+    
+    /* Transition speeds */
+    --transition-fast: 0.2s ease;
+    --transition-normal: 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+/* High Contrast mode overrides */
+body.high-contrast {
+    --bg-primary: #000000 !important;
+    --bg-secondary: #121212 !important;
+    --bg-card: #000000 !important;
+    --border-color: #ffff00 !important;
+    --text-primary: #ffffff !important;
+    --text-secondary: #ffff00 !important;
+    --accent-color: #ffff00 !important;
+    --accent-hover: #00ff00 !important;
+    --warning-color: #ffff00 !important;
+    --danger-color: #ff0000 !important;
+}
+
+body {
+    background-color: var(--bg-primary);
+    color: var(--text-primary);
+    font-family: 'Inter', sans-serif;
+    font-size: var(--font-scale);
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+    overflow-x: hidden;
+    transition: background-color var(--transition-normal), color var(--transition-normal), font-size var(--transition-fast);
+}
+
+h1, h2, h3, h4, h5, h6 {
+    font-family: 'Montserrat', sans-serif;
+    font-weight: 700;
+    color: var(--text-primary);
+}
+
+/* Accessibility Control Bar */
+.accessibility-bar {
+    background-color: rgba(15, 23, 42, 0.95);
+    border-bottom: 1px solid var(--border-color);
+    padding: 8px 0;
+    font-size: 0.9rem;
+    z-index: 1050;
+    transition: background-color var(--transition-normal);
+}
+
+.accessibility-btn {
+    background: transparent;
+    color: var(--text-primary);
+    border: 1px solid var(--border-color);
+    padding: 4px 12px;
+    border-radius: 6px;
+    font-weight: 500;
+    transition: all var(--transition-fast);
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+}
+
+.accessibility-btn:hover, .accessibility-btn:focus {
+    background-color: var(--accent-color);
+    color: #0f172a !important;
+    border-color: var(--accent-color);
+    outline: none;
+}
+
+body.high-contrast .accessibility-btn {
+    border: 2px solid #ffff00 !important;
+}
+
+body.high-contrast .accessibility-btn:hover {
+    background-color: #ffff00 !important;
+    color: #000000 !important;
+}
+
+/* Navigation Header styling */
+.navbar-custom {
+    background-color: rgba(15, 23, 42, 0.8) !important;
+    backdrop-filter: blur(12px);
+    -webkit-backdrop-filter: blur(12px);
+    border-bottom: 1px solid var(--border-color);
+    padding: 15px 0;
+    transition: background-color var(--transition-normal);
+}
+
+.navbar-brand-text {
+    font-weight: 800;
+    font-size: 1.5rem;
+    letter-spacing: -0.5px;
+    color: var(--text-primary) !important;
+}
+
+.navbar-brand-accent {
+    color: var(--accent-color);
+}
+
+.nav-link-custom {
+    color: var(--text-secondary) !important;
+    font-weight: 500;
+    padding: 8px 16px !important;
+    border-radius: 8px;
+    margin: 0 4px;
+    transition: all var(--transition-fast) !important;
+}
+
+.nav-link-custom:hover, .nav-link-custom.active {
+    color: var(--text-primary) !important;
+    background-color: rgba(16, 185, 129, 0.15);
+}
+
+body.high-contrast .nav-link-custom:hover, 
+body.high-contrast .nav-link-custom.active {
+    border: 2px solid #ffff00 !important;
+    background-color: transparent;
+    color: #ffff00 !important;
+}
+
+/* Floating Voice Recognition Assistant Trigger */
+.voice-assistant-badge {
+    position: fixed;
+    bottom: 24px;
+    right: 24px;
+    z-index: 1000;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+
+.voice-btn {
+    width: 60px;
+    height: 60px;
+    border-radius: 50%;
+    background-color: var(--accent-color);
+    color: #0f172a;
+    border: none;
+    box-shadow: 0 8px 30px rgba(16, 185, 129, 0.4);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 1.5rem;
+    transition: all var(--transition-normal);
+    cursor: pointer;
+}
+
+.voice-btn:hover {
+    transform: scale(1.1);
+    background-color: var(--accent-hover);
+}
+
+.voice-btn.listening {
+    background-color: var(--danger-color);
+    box-shadow: 0 0 0 15px rgba(239, 68, 68, 0.3);
+    animation: pulse 1.5s infinite;
+    color: white;
+}
+
+.voice-status-tooltip {
+    background-color: var(--bg-secondary);
+    border: 1px solid var(--border-color);
+    color: var(--text-primary);
+    padding: 10px 16px;
+    border-radius: 10px;
+    font-size: 0.85rem;
+    box-shadow: 0 10px 25px rgba(0, 0, 0, 0.3);
+    max-width: 250px;
+    opacity: 0;
+    pointer-events: none;
+    transform: translateY(10px);
+    transition: all var(--transition-normal);
+}
+
+.voice-status-tooltip.visible {
+    opacity: 1;
+    transform: translateY(0);
+}
+
+/* Card Styling - Glassmorphism style */
+.eco-card {
+    background: var(--bg-card);
+    border: 1px solid var(--border-color);
+    border-radius: 16px;
+    padding: 24px;
+    box-shadow: 0 4px 30px rgba(0, 0, 0, 0.2);
+    backdrop-filter: blur(5px);
+    -webkit-backdrop-filter: blur(5px);
+    transition: all var(--transition-normal);
+    height: 100%;
+}
+
+.eco-card:hover {
+    transform: translateY(-5px);
+    border-color: rgba(16, 185, 129, 0.4);
+    box-shadow: 0 12px 40px rgba(16, 185, 129, 0.1);
+}
+
+body.high-contrast .eco-card {
+    border: 2px solid #ffff00 !important;
+}
+
+body.high-contrast .eco-card:hover {
+    transform: none;
+    border-color: #00ff00 !important;
+}
+
+/* Audio Guide Overlay indicator for screen readers */
+.tts-readable {
+    cursor: pointer;
+    position: relative;
+    transition: outline var(--transition-fast);
+}
+
+body.tts-active .tts-readable:hover {
+    outline: 2px dashed var(--accent-color);
+    outline-offset: 4px;
+    background-color: rgba(16, 185, 129, 0.05);
+}
+
+body.high-contrast.tts-active .tts-readable:hover {
+    outline: 2px dashed #ffff00;
+}
+
+/* Speaker Trigger Button inline */
+.speaker-btn {
+    background: transparent;
+    border: none;
+    color: var(--text-secondary);
+    padding: 2px 6px;
+    font-size: 0.95rem;
+    cursor: pointer;
+    transition: color var(--transition-fast);
+    border-radius: 4px;
+}
+
+.speaker-btn:hover {
+    color: var(--accent-color);
+    background-color: rgba(255, 255, 255, 0.05);
+}
+
+/* Content Sections */
+.app-section {
+    display: none;
+    padding: 60px 0;
+    animation: fadeIn var(--transition-normal) forwards;
+}
+
+.app-section.active {
+    display: block;
+}
+
+/* Banner Hero style */
+.eco-hero {
+    background: linear-gradient(135deg, rgba(6, 78, 59, 0.8) 0%, rgba(15, 23, 42, 0.95) 100%);
+    border: 1px solid var(--border-color);
+    border-radius: 24px;
+    padding: 60px 40px;
+    margin-bottom: 40px;
+    position: relative;
+    overflow: hidden;
+}
+
+.eco-hero::before {
+    content: '';
+    position: absolute;
+    top: -50%;
+    right: -20%;
+    width: 300px;
+    height: 300px;
+    border-radius: 50%;
+    background: radial-gradient(circle, rgba(16,185,129,0.15) 0%, transparent 70%);
+    pointer-events: none;
+}
+
+/* Custom Leaflet Map styling */
+#map-container {
+    height: 450px;
+    border-radius: 16px;
+    border: 1px solid var(--border-color);
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
+    z-index: 1;
+}
+
+body.high-contrast #map-container {
+    border: 2px solid #ffff00;
+}
+
+/* Sidebar lists for points of interest */
+.point-list-group {
+    max-height: 450px;
+    overflow-y: auto;
+    padding-right: 8px;
+}
+
+.point-list-item {
+    background-color: var(--bg-secondary);
+    border: 1px solid var(--border-color);
+    border-radius: 12px !important;
+    color: var(--text-primary);
+    margin-bottom: 12px;
+    padding: 16px;
+    cursor: pointer;
+    transition: all var(--transition-normal);
+}
+
+.point-list-item:hover, .point-list-item.active {
+    background-color: rgba(16, 185, 129, 0.1);
+    border-color: var(--accent-color);
+}
+
+body.high-contrast .point-list-item:hover, 
+body.high-contrast .point-list-item.active {
+    border: 2px solid #ffff00 !important;
+}
+
+/* Interactive Calculator style */
+.calc-slider {
+    -webkit-appearance: none;
+    width: 100%;
+    height: 8px;
+    border-radius: 4px;
+    background: var(--bg-primary);
+    outline: none;
+    transition: background 0.3s;
+}
+
+.calc-slider::-webkit-slider-thumb {
+    -webkit-appearance: none;
+    appearance: none;
+    width: 20px;
+    height: 20px;
+    border-radius: 50%;
+    background: var(--accent-color);
+    cursor: pointer;
+    box-shadow: 0 0 10px rgba(16, 185, 129, 0.5);
+    transition: transform var(--transition-fast);
+}
+
+.calc-slider::-webkit-slider-thumb:hover {
+    transform: scale(1.2);
+}
+
+.metric-box {
+    background-color: rgba(15, 23, 42, 0.5);
+    border: 1px solid var(--border-color);
+    border-radius: 12px;
+    padding: 15px;
+    text-align: center;
+    transition: transform var(--transition-normal);
+}
+
+.metric-box:hover {
+    transform: translateY(-3px);
+}
+
+.metric-value {
+    font-size: 1.8rem;
+    font-weight: 800;
+    color: var(--accent-color);
+    margin-bottom: 4px;
+}
+
+/* Dashboard Statistics Cards */
+.dash-stat-card {
+    border-left: 4px solid var(--accent-color);
+}
+
+.dash-stat-card.warning {
+    border-left-color: var(--warning-color);
+}
+
+.dash-stat-card.danger {
+    border-left-color: var(--danger-color);
+}
+
+/* Accessibility Feedback Toast */
+.accessibility-toast {
+    position: fixed;
+    bottom: 24px;
+    left: 24px;
+    background-color: rgba(15, 23, 42, 0.95);
+    border: 1px solid var(--accent-color);
+    color: var(--text-primary);
+    padding: 12px 20px;
+    border-radius: 10px;
+    z-index: 1060;
+    box-shadow: 0 10px 25px rgba(0, 0, 0, 0.4);
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    pointer-events: none;
+    opacity: 0;
+    transform: translateY(10px);
+    transition: all var(--transition-normal);
+}
+
+.accessibility-toast.show {
+    opacity: 1;
+    transform: translateY(0);
+}
+
+/* Animations */
+@keyframes pulse {
+    0% {
+        box-shadow: 0 0 0 0 rgba(239, 68, 68, 0.5);
+    }
+    70% {
+        box-shadow: 0 0 0 15px rgba(239, 68, 68, 0);
+    }
+    100% {
+        box-shadow: 0 0 0 0 rgba(239, 68, 68, 0);
+    }
+}
+
+@keyframes fadeIn {
+    from {
+        opacity: 0;
+        transform: translateY(10px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+/* Footer style */
+footer {
+    background-color: #0b1120;
+    border-top: 1px solid var(--border-color);
+    padding: 30px 0;
+    margin-top: auto;
+    font-size: 0.9rem;
+    color: var(--text-secondary);
+}
+
+footer a {
+    color: var(--accent-color);
+    text-decoration: none;
+    transition: color var(--transition-fast);
+}
+
+footer a:hover {
+    color: var(--accent-hover);
+    text-decoration: underline;
+}
+
+/* Focus styles for Keyboard navigation */
+a:focus, button:focus, input:focus, select:focus, textarea:focus {
+    outline: 2px solid var(--accent-color);
+    outline-offset: 4px;
+}
+
+body.high-contrast a:focus, 
+body.high-contrast button:focus, 
+body.high-contrast input:focus, 
+body.high-contrast select:focus {
+    outline: 3px solid #ffff00 !important;
+}
+
+/* Custom Scrollbar for premium look */
+::-webkit-scrollbar {
+    width: 10px;
+}
+
+::-webkit-scrollbar-track {
+    background: var(--bg-primary);
+}
+
+::-webkit-scrollbar-thumb {
+    background: var(--bg-secondary);
+    border-radius: 5px;
+    border: 2px solid var(--bg-primary);
+}
+
+::-webkit-scrollbar-thumb:hover {
+    background: var(--accent-color);
+}
