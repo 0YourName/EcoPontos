@@ -25,6 +25,10 @@
     --transition-normal: 0.3s cubic-bezier(0.4, 0, 0.2, 1);
 }
 
+html {
+    font-size: var(--font-scale);
+}
+
 /* High Contrast mode overrides */
 body.high-contrast {
     --bg-primary: #000000 !important;
@@ -39,11 +43,131 @@ body.high-contrast {
     --danger-color: #ff0000 !important;
 }
 
+body.high-contrast .badge.bg-success {
+    background-color: #00ff00 !important;
+    color: #000000 !important;
+}
+
+body.high-contrast .badge.bg-danger {
+    background-color: #ff0000 !important;
+    color: #ffffff !important;
+}
+
+body.high-contrast .bg-dark {
+    background-color: #000000 !important;
+    border: 1px solid #ffff00 !important;
+}
+
+body.high-contrast .navbar-custom {
+    background-color: #000000 !important;
+}
+
+body.high-contrast .accessibility-bar {
+    background-color: #000000 !important;
+    border-bottom: 2px solid #ffff00 !important;
+}
+
+body.high-contrast .navbar-brand-accent {
+    color: #ffff00 !important;
+}
+
+body.high-contrast .eco-hero {
+    background: #000000 !important;
+    border: 2px solid #ffff00 !important;
+}
+
+body.high-contrast .eco-hero * {
+    color: #ffffff !important;
+}
+
+body.high-contrast .eco-card {
+    background: #000000 !important;
+    border: 2px solid #ffff00 !important;
+}
+
+body.high-contrast footer {
+    background-color: #000000 !important;
+    color: #ffffff !important;
+    border-top: 2px solid #ffff00 !important;
+}
+
+body.high-contrast table,
+body.high-contrast th,
+body.high-contrast td {
+    background-color: #000000 !important;
+    color: #ffffff !important;
+    border-color: #ffff00 !important;
+}
+
+body.high-contrast .table-hover tbody tr:hover {
+    background-color: #121212 !important;
+    color: #ffff00 !important;
+}
+
+body.high-contrast .point-list-item.active {
+    border: 3px solid #ffff00 !important;
+    background-color: #121212 !important;
+}
+
+body.high-contrast .calc-slider::-webkit-slider-thumb {
+    background: #ffff00 !important;
+    box-shadow: 0 0 10px #ffff00 !important;
+}
+
+body.high-contrast .text-success,
+body.high-contrast .text-emerald,
+body.high-contrast i.text-success,
+body.high-contrast i.text-emerald {
+    color: #00ff00 !important;
+}
+
+body.high-contrast .text-warning,
+body.high-contrast i.text-warning {
+    color: #ffff00 !important;
+}
+
+body.high-contrast .text-danger,
+body.high-contrast i.text-danger {
+    color: #ff0000 !important;
+}
+
+body.high-contrast .text-secondary {
+    color: #ffff00 !important;
+}
+
+body.high-contrast .text-light {
+    color: #ffffff !important;
+}
+
+body.high-contrast .text-white {
+    color: #ffffff !important;
+}
+
+body.high-contrast .voice-btn {
+    background-color: #ffff00 !important;
+    color: #000000 !important;
+    border: 2px solid #ffffff !important;
+}
+
+body.high-contrast .voice-btn.listening {
+    background-color: #ff0000 !important;
+    color: #ffffff !important;
+}
+
+body.high-contrast .metric-box {
+    background-color: #000000 !important;
+    border: 1px solid #ffff00 !important;
+}
+
+body.high-contrast .metric-value {
+    color: #ffff00 !important;
+}
+
 body {
     background-color: var(--bg-primary);
     color: var(--text-primary);
     font-family: 'Inter', sans-serif;
-    font-size: var(--font-scale);
+    font-size: 1rem;
     min-height: 100vh;
     display: flex;
     flex-direction: column;

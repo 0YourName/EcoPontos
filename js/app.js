@@ -10,13 +10,13 @@ document.addEventListener('DOMContentLoaded', () => {
     let speechRecognitionActive = false;
     let map = null;
     let mapMarkers = [];
-    
+
     // UI Selectors
     const navLinks = document.querySelectorAll('.nav-link-custom');
     const sections = document.querySelectorAll('.app-section');
     const descarteGuideWrapper = document.getElementById('descarte-guide-wrapper');
     const coletaMapWrapper = document.getElementById('coleta-map-wrapper');
-    
+
     const btnContrast = document.getElementById('btn-contrast');
     const btnFontIncrease = document.getElementById('btn-font-increase');
     const btnFontDecrease = document.getElementById('btn-font-decrease');
@@ -32,32 +32,35 @@ document.addEventListener('DOMContentLoaded', () => {
     const pointsData = [
         {
             id: 0,
-            name: "EcoPonto Centro (Praça Brasil)",
-            coords: [-23.1122, -50.3675],
-            address: "Rua Arthur Thomas, s/n - Praça Brasil, Centro, Bandeirantes - PR",
-            hours: "Segunda a Sexta: 08h às 17h | Sábado: 08h às 12h",
+            name: "EcoPonto Parque do Povo",
+            coords: [-23.103781187511, -50.36666367021205],
+            address: "Rua Dino Veiga, s/n - Vila Maria Alice, Bandeirantes - PR",
+            hours: "Sábado: 09h00 às 13h00",
             phone: "(43) 99122-3344",
-            accepts: "Baterias, pilhas, celulares, carregadores, tablets e pequenos eletrônicos domésticos.",
+            allowed: ["Celulares e tablets", "Carregadores e cabos", "Pilhas e baterias portáteis", "Pequenos eletroportáteis"],
+            notAllowed: ["Lâmpadas fluorescentes", "Baterias automotivas", "Geladeiras e fogões grandes"],
             icon: "bi-battery-charging"
         },
         {
             id: 1,
             name: "EcoPonto UENP (Campus Luiz Meneghel)",
-            coords: [-23.0975, -50.3792],
-            address: "Rodovia BR-369, Km 54 - Vila Maria, Bandeirantes - PR",
-            hours: "Segunda a Sexta: 07h30 às 22h00",
+            coords: [-23.10659817049162, -50.360406635430664],
+            address: "Campus Luiz Meneghel - BR-369, s/n - Bandeirantes, PR",
+            hours: "Segunda a Sexta: 08h00 às 21h00",
             phone: "(43) 99133-5566",
-            accepts: "Computadores, monitores, impressoras, teclados, mouses, cabos e placas de circuito.",
+            allowed: ["Computadores e notebooks", "Monitores e impressoras", "Teclados e mouses", "Cabos e placas de circuito"],
+            notAllowed: ["Lâmpadas fluorescentes", "Pilhas soltas", "Eletrodomésticos de grande porte"],
             icon: "bi-laptop"
         },
         {
             id: 2,
-            name: "EcoPonto Zona Norte (Avenida Bandeirantes)",
-            coords: [-23.1055, -50.3590],
-            address: "Avenida Bandeirantes, 1200 - Vila Ouro Verde, Bandeirantes - PR",
-            hours: "Segunda a Sexta: 08h00 às 18h00",
+            name: "EcoPonto Praça da Brasil/Japão",
+            coords: [-23.106753503628596, -50.37548821534646],
+            address: "Praça Mal. Deodoro, s/n - Centro, Bandeirantes - PR",
+            hours: "Sábado: 09h00 às 13h00",
             phone: "(43) 99144-7788",
-            accepts: "Geladeiras, fogões, TVs antigas, micro-ondas, ventiladores e eletrodomésticos de grande porte.",
+            allowed: ["Geladeiras e fogões", "Fornos e micro-ondas", "TVs e monitores grandes", "Ventiladores e ar-condicionado"],
+            notAllowed: ["Pilhas portáteis", "Baterias de carro", "Lâmpadas fluorescentes"],
             icon: "bi-tv"
         }
     ];
@@ -130,6 +133,7 @@ document.addEventListener('DOMContentLoaded', () => {
             speakText(`Navegando para a seção: ${sectionName}`);
         }
     }
+    window.showSection = showSection;
 
     // Attach click events to nav links
     navLinks.forEach(link => {
@@ -157,13 +161,18 @@ document.addEventListener('DOMContentLoaded', () => {
         const isActive = document.body.classList.contains('high-contrast');
         localStorage.setItem('highContrast', isActive ? 'true' : 'false');
         showToast(isActive ? "Contraste Alto ativado." : "Contraste normal ativado.");
-        
+
         // Leaflet map layer adjustments if contrast changes
         if (map) {
             map.remove();
             map = null;
             initLeafletMap();
         }
+
+        // Recreate charts to update colors for high contrast
+        if (collectedChart) collectedChart.destroy();
+        if (materialsChart) materialsChart.destroy();
+        initCharts();
     });
 
     // Check saved high contrast preference
@@ -235,7 +244,7 @@ document.addEventListener('DOMContentLoaded', () => {
     btnTtsToggle.addEventListener('click', () => {
         ttsActive = !ttsActive;
         document.body.classList.toggle('tts-active', ttsActive);
-        
+
         if (ttsActive) {
             btnTtsToggle.classList.add('active');
             btnTtsToggle.innerHTML = '<i class="bi bi-volume-up-fill"></i> Parar Leitor';
@@ -269,24 +278,51 @@ document.addEventListener('DOMContentLoaded', () => {
         }
     });
 
-    // Readable hovered elements
-    document.querySelectorAll('.tts-readable').forEach(element => {
-        element.addEventListener('mouseenter', () => {
-            if (ttsActive) {
-                let textToRead = element.innerText;
-                // Exclude speaker icon text if present
-                const speakerBtn = element.querySelector('.speaker-btn');
-                if (speakerBtn) {
-                    textToRead = textToRead.replace(speakerBtn.innerText, "");
-                }
-                speakText(textToRead);
+    // Delegated TTS Hover Reading (Handles static and dynamic content, e.g., point list cards, buttons)
+    let lastSpokenElement = null;
+
+    document.body.addEventListener('mouseover', (e) => {
+        if (!ttsActive) return;
+
+        // Closest element that is readable or interactive
+        const element = e.target.closest('.tts-readable, button, .nav-link-custom, .point-list-item');
+        if (!element) return;
+
+        // Avoid repeating text if cursor moves inside child elements
+        if (lastSpokenElement === element) return;
+        lastSpokenElement = element;
+
+        // Don't read the speaker button on hover to avoid double speech
+        if (element.classList.contains('speaker-btn')) return;
+
+        // Clone element to manipulate content safely
+        let clone = element.cloneNode(true);
+
+        // Remove any nested speaker buttons so they aren't read as text
+        const nestedSpeaker = clone.querySelector('.speaker-btn');
+        if (nestedSpeaker) nestedSpeaker.remove();
+
+        const textToRead = clone.innerText || clone.getAttribute('aria-label') || '';
+        if (textToRead.trim()) {
+            speakText(textToRead);
+        }
+    });
+
+    document.body.addEventListener('mouseout', (e) => {
+        if (!ttsActive) return;
+
+        const element = e.target.closest('.tts-readable, button, .nav-link-custom, .point-list-item');
+        if (element && element === lastSpokenElement) {
+            const related = e.relatedTarget;
+            if (!related || !element.contains(related)) {
+                lastSpokenElement = null;
             }
-        });
+        }
     });
 
     // Load voices if not loaded immediately
     if (window.speechSynthesis) {
-        window.speechSynthesis.onvoiceschanged = () => {};
+        window.speechSynthesis.onvoiceschanged = () => { };
     }
 
     // ----------------------------------------------------
@@ -329,7 +365,7 @@ document.addEventListener('DOMContentLoaded', () => {
             const transcript = e.results[0][0].transcript.toLowerCase().trim();
             console.log("Heard:", transcript);
             voiceStatusText.innerHTML = `Entendido: <strong>"${transcript}"</strong>`;
-            
+
             setTimeout(() => {
                 voiceTooltip.classList.remove('visible');
             }, 2500);
@@ -365,8 +401,8 @@ document.addEventListener('DOMContentLoaded', () => {
         } else if (command.includes('sobre') || command.includes('empresa') || command.includes('equipe')) {
             showSection('sobre');
             showToast("Navegando para Sobre Nós via comando de voz.");
-        } 
-        
+        }
+
         // Font accessibility
         else if (command.includes('aumentar letra') || command.includes('aumentar fonte')) {
             if (fontScale < 160) {
@@ -382,8 +418,8 @@ document.addEventListener('DOMContentLoaded', () => {
                 showToast("Tamanho diminuído.");
                 speakText("Tamanho da fonte diminuído.");
             }
-        } 
-        
+        }
+
         // Contraste
         else if (command.includes('contraste') || command.includes('alto contraste')) {
             document.body.classList.toggle('high-contrast');
@@ -396,6 +432,9 @@ document.addEventListener('DOMContentLoaded', () => {
                 map = null;
                 initLeafletMap();
             }
+            if (collectedChart) collectedChart.destroy();
+            if (materialsChart) materialsChart.destroy();
+            initCharts();
         }
 
         // Reading command
@@ -433,7 +472,7 @@ document.addEventListener('DOMContentLoaded', () => {
             updateCalculator();
             speakText("Calculado para 1 eletrodoméstico.");
         }
-        
+
         else {
             showToast(`Comando "${command}" não reconhecido.`);
             speakText("Desculpe, não entendi este comando.");
@@ -467,15 +506,15 @@ document.addEventListener('DOMContentLoaded', () => {
 
         // Custom Leaflet styling base tiles
         const isContrast = document.body.classList.contains('high-contrast');
-        const tileUrl = isContrast 
+        const tileUrl = isContrast
             ? 'https://{s}.basemaps.cartocdn.com/dark_all/{z}/{x}/{y}{r}.png' // high contrast dark tiles
             : 'https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png'; // standard tiles
-            
+
         const tileAttribution = isContrast
             ? '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors &copy; <a href="https://carto.com/attributions">CARTO</a>'
             : '&copy; OpenStreetMap contributors';
 
-        // Coordinates centered on Bandeirantes, PR (-23.1114, -50.3678)
+        // Coordinates centered on Bandeirantes, PR (-23.1065, -50.3685)
         map = L.map('map-container').setView([-23.1065, -50.3685], 14);
 
         L.tileLayer(tileUrl, {
@@ -493,24 +532,56 @@ document.addEventListener('DOMContentLoaded', () => {
         }
 
         pointsData.forEach(point => {
-            // Add custom Leaflet Marker
-            const markerColor = isContrast ? '#ffff00' : '#10b981';
-            
+            // Build permitted/prohibited lists for Leaflet Popup
+            const popupAllowedList = point.allowed.map(item => `<li>${item}</li>`).join('');
+            const popupNotAllowedList = point.notAllowed.map(item => `<li>${item}</li>`).join('');
+
             // Popup HTML
             const popupContent = `
-                <div style="font-family: 'Inter', sans-serif; color: #000; min-width: 200px;">
+                <div style="font-family: 'Inter', sans-serif; color: #000; min-width: 250px;">
                     <h6 style="font-weight: 700; margin: 0 0 4px 0; color: #0f172a;">${point.name}</h6>
                     <p style="font-size: 0.8rem; margin: 0 0 8px 0; color: #64748b;">${point.address}</p>
                     <div style="font-size: 0.75rem; margin-bottom: 4px;"><strong>Funcionamento:</strong> ${point.hours}</div>
-                    <div style="font-size: 0.75rem; margin-bottom: 4px;"><strong>Contato:</strong> ${point.phone}</div>
+                    <div style="font-size: 0.75rem; margin-bottom: 8px;"><strong>Contato:</strong> ${point.phone}</div>
+                    
+                    <div style="font-size: 0.75rem; border-top: 1px solid #e2e8f0; padding-top: 6px; margin-bottom: 4px;">
+                        <strong style="color: #10b981;">Permitido:</strong>
+                        <ul style="margin: 2px 0 6px 0; padding-left: 12px; color: #334155;">
+                            ${popupAllowedList}
+                        </ul>
+                    </div>
                     <div style="font-size: 0.75rem; border-top: 1px solid #e2e8f0; padding-top: 4px;">
-                        <strong>Aceita:</strong> ${point.accepts}
+                        <strong style="color: #ef4444;">Não permitido:</strong>
+                        <ul style="margin: 2px 0 0 0; padding-left: 12px; color: #334155;">
+                            ${popupNotAllowedList}
+                        </ul>
                     </div>
                 </div>
             `;
 
             const marker = L.marker(point.coords).addTo(map).bindPopup(popupContent);
             mapMarkers.push(marker);
+
+            // Listen to marker click for TTS
+            marker.on('click', () => {
+                if (ttsActive) {
+                    speakText(`${point.name}. Endereço: ${point.address}. Funcionamento: ${point.hours}`);
+                }
+
+                // Highlight corresponding sidebar item
+                document.querySelectorAll('.point-list-item').forEach(item => {
+                    if (parseInt(item.getAttribute('data-id')) === point.id) {
+                        item.classList.add('active');
+                        item.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+                    } else {
+                        item.classList.remove('active');
+                    }
+                });
+            });
+
+            // Build sidebar card lists
+            const sidebarAllowedItems = point.allowed.map(item => `<li class="col"><i class="bi bi-check-circle-fill text-success"></i> ${item}</li>`).join('');
+            const sidebarNotAllowedItems = point.notAllowed.map(item => `<li class="col"><i class="bi bi-x-circle-fill text-danger"></i> ${item}</li>`).join('');
 
             // Add sidebar card item
             if (pointListContainer) {
@@ -522,11 +593,23 @@ document.addEventListener('DOMContentLoaded', () => {
                         <div class="fs-4 text-emerald" style="color: var(--accent-color);">
                             <i class="bi ${point.icon}"></i>
                         </div>
-                        <div>
+                        <div class="w-100">
                             <h5 class="fs-6 fw-bold mb-1">${point.name}</h5>
                             <p class="small text-secondary mb-1">${point.address}</p>
-                            <div class="small text-warning"><i class="bi bi-clock"></i> ${point.hours}</div>
-                            <button class="speaker-btn mt-1" aria-label="Ouvir informações do ponto de descarte">
+                            <div class="small text-warning mb-2"><i class="bi bi-clock"></i> ${point.hours}</div>
+                            
+                            <div class="mt-2 small border-top border-secondary pt-2">
+                                <span class="fw-bold d-block mb-1 text-light">Itens Permitidos:</span>
+                                <ul class="list-unstyled mb-2 ps-0 text-secondary row row-cols-2 g-1">
+                                    ${sidebarAllowedItems}
+                                </ul>
+                                <span class="fw-bold d-block mb-1 text-light">Itens NÃO Permitidos:</span>
+                                <ul class="list-unstyled mb-0 ps-0 text-secondary row row-cols-2 g-1">
+                                    ${sidebarNotAllowedItems}
+                                </ul>
+                            </div>
+                            
+                            <button class="speaker-btn mt-2" aria-label="Ouvir informações do ponto de descarte">
                                 <i class="bi bi-volume-up"></i> Ouvir endereço
                             </button>
                         </div>
@@ -540,10 +623,15 @@ document.addEventListener('DOMContentLoaded', () => {
                     // Focus Marker on map
                     map.setView(point.coords, 16);
                     marker.openPopup();
-                    
+
                     // Highlight selected item in list
                     document.querySelectorAll('.point-list-item').forEach(item => item.classList.remove('active'));
                     card.classList.add('active');
+
+                    // Read point details if TTS is active
+                    if (ttsActive) {
+                        speakText(`${point.name}. Endereço: ${point.address}. Horário: ${point.hours}`);
+                    }
                 });
 
                 pointListContainer.appendChild(card);
@@ -576,7 +664,7 @@ document.addEventListener('DOMContentLoaded', () => {
         const gridColor = isContrast ? '#ffff00' : 'rgba(255, 255, 255, 0.05)';
         const textLabelColor = isContrast ? '#ffffff' : '#94a3b8';
         const primaryColor = isContrast ? '#ffff00' : '#10b981';
-        const accentColorsList = isContrast 
+        const accentColorsList = isContrast
             ? ['#ffffff', '#ffff00', '#00ff00', '#ff0000', '#0000ff']
             : ['#10b981', '#3b82f6', '#f59e0b', '#8b5cf6', '#ec4899'];
 
@@ -641,7 +729,7 @@ document.addEventListener('DOMContentLoaded', () => {
     // E-waste Impact Calculator
     // ----------------------------------------------------
     const calcSliders = document.querySelectorAll('.calc-slider');
-    
+
     function updateCalculator() {
         let totalWater = 0;
         let totalSoil = 0;
@@ -652,7 +740,7 @@ document.addEventListener('DOMContentLoaded', () => {
         calcSliders.forEach(slider => {
             const id = slider.id.replace('calc-', '');
             const qty = parseInt(slider.value);
-            
+
             // Update quantity display bubble
             const qtyBadge = document.getElementById(`${slider.id}-qty`);
             if (qtyBadge) {
@@ -669,13 +757,36 @@ document.addEventListener('DOMContentLoaded', () => {
             }
         });
 
-        // Formatter function
+        // Dynamic formatting helpers to avoid long raw numbers
+        const formatWeight = (kg) => {
+            if (kg >= 1000) {
+                return `${(kg / 1000).toFixed(2).replace('.', ',')} toneladas`;
+            }
+            return `${kg.toFixed(1).replace('.', ',')} kg`;
+        };
+
+        const formatWater = (liters) => {
+            if (liters >= 1000000) {
+                return `${(liters / 1000000).toFixed(1).replace('.', ',')} milhões de L`;
+            } else if (liters >= 1000) {
+                return `${(liters / 1000).toFixed(1).replace('.', ',')} mil L`;
+            }
+            return `${liters} L`;
+        };
+
+        const formatSoil = (sqm) => {
+            if (sqm >= 1000) {
+                return `${(sqm / 1000).toFixed(1).replace('.', ',')} mil m²`;
+            }
+            return `${sqm} m²`;
+        };
+
         const formatNumber = (num) => num.toLocaleString('pt-BR');
 
         // Update DOM values
-        document.getElementById('metric-weight').textContent = `${totalWeight.toFixed(1)} kg`;
-        document.getElementById('metric-water').textContent = `${formatNumber(totalWater)} L`;
-        document.getElementById('metric-soil').textContent = `${formatNumber(totalSoil)} m²`;
+        document.getElementById('metric-weight').textContent = formatWeight(totalWeight);
+        document.getElementById('metric-water').textContent = formatWater(totalWater);
+        document.getElementById('metric-soil').textContent = formatSoil(totalSoil);
         document.getElementById('metric-degradation').textContent = `Até ${formatNumber(totalDegradation)} anos`;
         document.getElementById('metric-recovery').textContent = `${formatNumber(totalRecovery)} anos`;
     }
@@ -683,7 +794,7 @@ document.addEventListener('DOMContentLoaded', () => {
     // Attach slider events
     calcSliders.forEach(slider => {
         slider.addEventListener('input', updateCalculator);
-        
+
         // Announce current state when slider is changed and TTS is active
         slider.addEventListener('change', () => {
             if (ttsActive) {
@@ -715,7 +826,7 @@ document.addEventListener('DOMContentLoaded', () => {
     // ----------------------------------------------------
     // Show home page first
     showSection('inicio');
-    
+
     // Init Leaflet map
     initLeafletMap();
 

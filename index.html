@@ -30,7 +30,7 @@
         <div class="container d-flex flex-wrap justify-content-between align-items-center gap-2">
             <!-- Left: TTS & Screen Controls -->
             <div class="d-flex align-items-center gap-2">
-                <button id="btn-tts-toggle" class="accessibility-btn" aria-label="Ativar leitura por voz do site">
+                <button id="btn-tts-toggle" class="accessibility-btn tts-readable" aria-label="Ativar leitura por voz do site">
                     <i class="bi bi-volume-up"></i> Ouvir Site
                 </button>
                 <span class="text-secondary d-none d-md-inline">|</span>
@@ -39,13 +39,13 @@
             <!-- Right: Text resizing & Contrast -->
             <div class="d-flex align-items-center gap-2">
                 <span class="small text-secondary d-none d-sm-inline">Tamanho da Letra:</span>
-                <button id="btn-font-decrease" class="accessibility-btn" aria-label="Diminuir tamanho da letra">A-</button>
-                <button id="btn-font-reset" class="accessibility-btn" aria-label="Resetar tamanho da letra">A</button>
-                <button id="btn-font-increase" class="accessibility-btn" aria-label="Aumentar tamanho da letra">A+</button>
+                <button id="btn-font-decrease" class="accessibility-btn tts-readable" aria-label="Diminuir tamanho da letra">A-</button>
+                <button id="btn-font-reset" class="accessibility-btn tts-readable" aria-label="Resetar tamanho da letra">A</button>
+                <button id="btn-font-increase" class="accessibility-btn tts-readable" aria-label="Aumentar tamanho da letra">A+</button>
                 
                 <span class="text-secondary">|</span>
                 
-                <button id="btn-contrast" class="accessibility-btn" aria-label="Alternar alto contraste para leitura">
+                <button id="btn-contrast" class="accessibility-btn tts-readable" aria-label="Alternar alto contraste para leitura">
                     <i class="bi bi-eye"></i> Alto Contraste
                 </button>
             </div>
@@ -113,10 +113,10 @@
                             <button class="speaker-btn" aria-label="Ouvir descrição"><i class="bi bi-volume-up"></i></button>
                         </p>
                         <div class="d-flex flex-wrap gap-3">
-                            <button class="btn btn-success btn-lg px-4" onclick="showSection('descarte')" aria-label="Ir para o guia de como descartar">
+                            <button class="btn btn-success btn-lg px-4 tts-readable" onclick="showSection('descarte')" aria-label="Ir para o guia de como descartar">
                                 <i class="bi bi-book"></i> Guia Prático de Descarte
                             </button>
-                            <button class="btn btn-outline-light btn-lg px-4" onclick="showSection('pontos-coleta')" aria-label="Ver o mapa com pontos de coleta">
+                            <button class="btn btn-outline-light btn-lg px-4 tts-readable" onclick="showSection('pontos-coleta')" aria-label="Ver o mapa com pontos de coleta">
                                 <i class="bi bi-map"></i> Ver Mapa de Locais
                             </button>
                         </div>
@@ -145,7 +145,7 @@
                                 <button class="speaker-btn" aria-label="Ouvir descrição"><i class="bi bi-volume-up"></i></button>
                             </p>
                         </div>
-                        <button class="btn btn-success w-100 mt-3" onclick="showSection('pontos-coleta')" aria-label="Ver pontos de coleta rápidos">
+                        <button class="btn btn-success w-100 mt-3 tts-readable" onclick="showSection('pontos-coleta')" aria-label="Ver pontos de coleta rápidos">
                             Ver Endereços e Mapa
                         </button>
                     </div>
@@ -165,7 +165,7 @@
                                 <button class="speaker-btn" aria-label="Ouvir descrição"><i class="bi bi-volume-up"></i></button>
                             </p>
                         </div>
-                        <button class="btn btn-success w-100 mt-3" onclick="showSection('descarte')" aria-label="Ver guia de separação de lixo eletrônico">
+                        <button class="btn btn-success w-100 mt-3 tts-readable" onclick="showSection('descarte')" aria-label="Ver guia de separação de lixo eletrônico">
                             Ver Passo a Passo
                         </button>
                     </div>
@@ -185,7 +185,7 @@
                                 <button class="speaker-btn" aria-label="Ouvir descrição"><i class="bi bi-volume-up"></i></button>
                             </p>
                         </div>
-                        <button class="btn btn-success w-100 mt-3" onclick="showSection('dashboard')" aria-label="Calcular meu impacto ecológico no painel">
+                        <button class="btn btn-success w-100 mt-3 tts-readable" onclick="showSection('dashboard')" aria-label="Calcular meu impacto ecológico no painel">
                             Calcular Meu Impacto
                         </button>
                     </div>
@@ -360,7 +360,7 @@
                     <div class="eco-card dash-stat-card">
                         <div class="small text-secondary tts-readable">Lixo Eletrônico Coletado (Acumulado)</div>
                         <div class="fs-2 fw-bold text-success my-1 tts-readable">
-                            12.850 kg
+                            12,8 toneladas
                             <button class="speaker-btn" aria-label="Ouvir dados"><i class="bi bi-volume-up"></i></button>
                         </div>
                         <div class="small text-secondary">Divergido de aterros sanitários locais</div>
@@ -371,7 +371,7 @@
                     <div class="eco-card dash-stat-card warning">
                         <div class="small text-secondary tts-readable">Água Protegida de Contaminação</div>
                         <div class="fs-2 fw-bold text-warning my-1 tts-readable">
-                            32.500.000 L
+                            32,5 milhões de litros
                             <button class="speaker-btn" aria-label="Ouvir dados de água"><i class="bi bi-volume-up"></i></button>
                         </div>
                         <div class="small text-secondary">Prevenindo infiltração nos lençóis freáticos</div>
@@ -382,7 +382,7 @@
                     <div class="eco-card dash-stat-card danger">
                         <div class="small text-secondary tts-readable">Solo Protegido de Metais Pesados</div>
                         <div class="fs-2 fw-bold text-danger my-1 tts-readable">
-                            14.200 m²
+                            14,2 mil m²
                             <button class="speaker-btn" aria-label="Ouvir dados de solo"><i class="bi bi-volume-up"></i></button>
                         </div>
                         <div class="small text-secondary">Segurança ecológica para plantio em Bandeirantes</div>
@@ -458,7 +458,7 @@
                         </div>
 
                         <div class="text-end">
-                            <button id="btn-reset-calc" class="btn btn-outline-danger btn-sm mt-3" aria-label="Limpar dados do simulador">
+                            <button id="btn-reset-calc" class="btn btn-outline-danger btn-sm mt-3 tts-readable" aria-label="Limpar dados do simulador">
                                 <i class="bi bi-trash"></i> Limpar Escolhas
                             </button>
                         </div>
@@ -523,7 +523,8 @@
                 
                 <div class="col-lg-6">
                     <div class="eco-card" style="min-height: 350px;">
-                        <h3 class="h5 fw-bold text-center mb-3 tts-readable">Materiais Preciosos Recuperados por Reciclagem (%)</h3>
+                        <h3 class="h5 fw-bold text-center mb-1 tts-readable">Materiais Recuperados por Reciclagem (%)</h3>
+                        <p class="text-secondary small text-center mb-3 tts-readable">Este gráfico representa a proporção média de materiais recuperados do total acumulado de lixo eletrônico coletado.</p>
                         <div style="position: relative; height: 280px; width: 100%;">
                             <canvas id="materialsChart"></canvas>
                         </div>
@@ -611,7 +612,7 @@
         <div id="voice-tooltip" class="voice-status-tooltip">
             <span id="voice-status">Diga um comando (Ex: "Mapa")</span>
         </div>
-        <button id="btn-voice-toggle" class="voice-btn" aria-label="Ligar ou desligar assistente por voz">
+        <button id="btn-voice-toggle" class="voice-btn tts-readable" aria-label="Ligar ou desligar assistente por voz">
             <i class="bi bi-mic-fill"></i>
         </button>
     </div>
