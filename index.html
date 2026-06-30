@@ -1,28 +1,32 @@
 <!DOCTYPE html>
 <html lang="pt-BR">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>EcoPontos Bandeirantes - Descarte Inteligente de Lixo Eletrônico</title>
-    
+
     <!-- Meta tags for SEO & Digital Inclusion -->
-    <meta name="description" content="Portal de descarte de lixo eletrônico para Bandeirantes - PR. Encontre ecopontos, calcule seu impacto ambiental positivo e use nossos recursos de acessibilidade por voz.">
+    <meta name="description"
+        content="Portal de descarte de lixo eletrônico para Bandeirantes - PR. Encontre ecopontos, calcule seu impacto ambiental positivo e use nossos recursos de acessibilidade por voz.">
     <meta name="author" content="Projeto Acadêmico - EcoPontos">
-    
+
     <!-- Google Fonts -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    
+
     <!-- Bootstrap 5 CSS -->
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
     <!-- Bootstrap Icons -->
     <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.5/font/bootstrap-icons.css" rel="stylesheet">
     <!-- Leaflet CSS for Map -->
-    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" integrity="sha256-p4NxAoJBhIIN+hmNHrzRCf9tD/miZyoHS5obTRR9BMY=" crossorigin="" />
-    
+    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css"
+        integrity="sha256-p4NxAoJBhIIN+hmNHrzRCf9tD/miZyoHS5obTRR9BMY=" crossorigin="" />
+
     <!-- Custom Style Sheet (Relative Path for Github Pages) -->
     <link rel="stylesheet" href="css/style.css">
 </head>
+
 <body>
 
     <!-- 1. Accessibility Control Bar (Top) -->
@@ -30,22 +34,28 @@
         <div class="container d-flex flex-wrap justify-content-between align-items-center gap-2">
             <!-- Left: TTS & Screen Controls -->
             <div class="d-flex align-items-center gap-2">
-                <button id="btn-tts-toggle" class="accessibility-btn tts-readable" aria-label="Ativar leitura por voz do site">
+                <button id="btn-tts-toggle" class="accessibility-btn tts-readable"
+                    aria-label="Ativar leitura por voz do site">
                     <i class="bi bi-volume-up"></i> Ouvir Site
                 </button>
                 <span class="text-secondary d-none d-md-inline">|</span>
-                <span class="small text-secondary d-none d-md-inline">Comandos por Voz: Fale "Início", "Mapa" ou "Painel"</span>
+                <span class="small text-secondary d-none d-md-inline">Comandos por Voz: Fale "Início", "Mapa" ou
+                    "Painel"</span>
             </div>
             <!-- Right: Text resizing & Contrast -->
             <div class="d-flex align-items-center gap-2">
                 <span class="small text-secondary d-none d-sm-inline">Tamanho da Letra:</span>
-                <button id="btn-font-decrease" class="accessibility-btn tts-readable" aria-label="Diminuir tamanho da letra">A-</button>
-                <button id="btn-font-reset" class="accessibility-btn tts-readable" aria-label="Resetar tamanho da letra">A</button>
-                <button id="btn-font-increase" class="accessibility-btn tts-readable" aria-label="Aumentar tamanho da letra">A+</button>
-                
+                <button id="btn-font-decrease" class="accessibility-btn tts-readable"
+                    aria-label="Diminuir tamanho da letra">A-</button>
+                <button id="btn-font-reset" class="accessibility-btn tts-readable"
+                    aria-label="Resetar tamanho da letra">A</button>
+                <button id="btn-font-increase" class="accessibility-btn tts-readable"
+                    aria-label="Aumentar tamanho da letra">A+</button>
+
                 <span class="text-secondary">|</span>
-                
-                <button id="btn-contrast" class="accessibility-btn tts-readable" aria-label="Alternar alto contraste para leitura">
+
+                <button id="btn-contrast" class="accessibility-btn tts-readable"
+                    aria-label="Alternar alto contraste para leitura">
                     <i class="bi bi-eye"></i> Alto Contraste
                 </button>
             </div>
@@ -53,17 +63,20 @@
     </div>
 
     <!-- 2. Main Navigation Bar -->
-    <nav class="navbar navbar-expand-lg navbar-dark navbar-custom sticky-top" role="navigation" aria-label="Navegação principal">
+    <nav class="navbar navbar-expand-lg navbar-dark navbar-custom sticky-top" role="navigation"
+        aria-label="Navegação principal">
         <div class="container">
-            <a class="navbar-brand d-flex align-items-center" href="#" onclick="event.preventDefault(); showSection('inicio');">
+            <a class="navbar-brand d-flex align-items-center" href="#"
+                onclick="event.preventDefault(); showSection('inicio');">
                 <span class="navbar-brand-text">Eco<span class="navbar-brand-accent">Pontos</span></span>
                 <span class="badge bg-success ms-2 small" style="font-size: 0.7rem;">Bandeirantes - PR</span>
             </a>
-            
-            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarContent" aria-controls="navbarContent" aria-expanded="false" aria-label="Alternar navegação">
+
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarContent"
+                aria-controls="navbarContent" aria-expanded="false" aria-label="Alternar navegação">
                 <span class="navbar-toggler-icon"></span>
             </button>
-            
+
             <div class="collapse navbar-collapse" id="navbarContent">
                 <ul class="navbar-nav ms-auto mb-2 mb-lg-0">
                     <li class="nav-item">
@@ -98,7 +111,7 @@
 
     <!-- 3. SPA Section Containers -->
     <main class="container my-4" id="main-content">
-        
+
         <!-- SECTION: INÍCIO (HOME) -->
         <section id="inicio" class="app-section active" aria-labelledby="title-inicio">
             <div class="eco-hero text-white mb-5">
@@ -106,17 +119,23 @@
                     <div class="col-lg-8">
                         <h1 id="title-inicio" class="display-5 fw-bold mb-3 tts-readable">
                             Descarte seu lixo eletrônico com facilidade em Bandeirantes
-                            <button class="speaker-btn" aria-label="Ouvir título principal"><i class="bi bi-volume-up"></i></button>
+                            <button class="speaker-btn" aria-label="Ouvir título principal"><i
+                                    class="bi bi-volume-up"></i></button>
                         </h1>
                         <p class="lead tts-readable mb-4">
-                            Você sabia que celulares, computadores e pilhas jogados no lixo comum poluem a nossa terra e a nossa água por centenas de anos? Faça a diferença! Conheça os locais de descarte e veja o impacto ecológico na nossa cidade.
-                            <button class="speaker-btn" aria-label="Ouvir descrição"><i class="bi bi-volume-up"></i></button>
+                            Você sabia que celulares, computadores e pilhas jogados no lixo comum poluem a nossa terra e
+                            a nossa água por centenas de anos? Faça a diferença! Conheça os locais de descarte e veja o
+                            impacto ecológico na nossa cidade.
+                            <button class="speaker-btn" aria-label="Ouvir descrição"><i
+                                    class="bi bi-volume-up"></i></button>
                         </p>
                         <div class="d-flex flex-wrap gap-3">
-                            <button class="btn btn-success btn-lg px-4 tts-readable" onclick="showSection('descarte')" aria-label="Ir para o guia de como descartar">
+                            <button class="btn btn-success btn-lg px-4 tts-readable" onclick="showSection('descarte')"
+                                aria-label="Ir para o guia de como descartar">
                                 <i class="bi bi-book"></i> Guia Prático de Descarte
                             </button>
-                            <button class="btn btn-outline-light btn-lg px-4 tts-readable" onclick="showSection('pontos-coleta')" aria-label="Ver o mapa com pontos de coleta">
+                            <button class="btn btn-outline-light btn-lg px-4 tts-readable"
+                                onclick="showSection('pontos-coleta')" aria-label="Ver o mapa com pontos de coleta">
                                 <i class="bi bi-map"></i> Ver Mapa de Locais
                             </button>
                         </div>
@@ -129,7 +148,7 @@
                 O que você gostaria de fazer hoje?
                 <button class="speaker-btn" aria-label="Ouvir pergunta"><i class="bi bi-volume-up"></i></button>
             </h2>
-            
+
             <div class="row g-4">
                 <!-- Persona 1 Focus: Lurdes (Easy, quick location card) -->
                 <div class="col-md-4">
@@ -138,14 +157,18 @@
                             <div class="fs-1 text-emerald mb-3"><i class="bi bi-geo-alt-fill text-success"></i></div>
                             <h3 class="h5 fw-bold tts-readable">
                                 Encontrar Ecoponto Rápido
-                                <button class="speaker-btn" aria-label="Ouvir título"><i class="bi bi-volume-up"></i></button>
+                                <button class="speaker-btn" aria-label="Ouvir título"><i
+                                        class="bi bi-volume-up"></i></button>
                             </h3>
                             <p class="text-secondary tts-readable">
-                                Precisa saber onde levar seus eletrônicos velhos sem complicação? Veja a lista de locais de coleta perto de você em Bandeirantes com endereço simples e horário de funcionamento.
-                                <button class="speaker-btn" aria-label="Ouvir descrição"><i class="bi bi-volume-up"></i></button>
+                                Precisa saber onde levar seus eletrônicos velhos sem complicação? Veja a lista de locais
+                                de coleta perto de você em Bandeirantes com endereço simples e horário de funcionamento.
+                                <button class="speaker-btn" aria-label="Ouvir descrição"><i
+                                        class="bi bi-volume-up"></i></button>
                             </p>
                         </div>
-                        <button class="btn btn-success w-100 mt-3 tts-readable" onclick="showSection('pontos-coleta')" aria-label="Ver pontos de coleta rápidos">
+                        <button class="btn btn-success w-100 mt-3 tts-readable" onclick="showSection('pontos-coleta')"
+                            aria-label="Ver pontos de coleta rápidos">
                             Ver Endereços e Mapa
                         </button>
                     </div>
@@ -158,14 +181,18 @@
                             <div class="fs-1 text-emerald mb-3"><i class="bi bi-shield-check text-success"></i></div>
                             <h3 class="h5 fw-bold tts-readable">
                                 Como Separar e Guardar?
-                                <button class="speaker-btn" aria-label="Ouvir título"><i class="bi bi-volume-up"></i></button>
+                                <button class="speaker-btn" aria-label="Ouvir título"><i
+                                        class="bi bi-volume-up"></i></button>
                             </h3>
                             <p class="text-secondary tts-readable">
-                                Tem dúvidas sobre como guardar pilhas velhas ou o que fazer com aparelhos quebrados? Aprenda as regras simples para organizar tudo com segurança antes de levar ao ecoponto.
-                                <button class="speaker-btn" aria-label="Ouvir descrição"><i class="bi bi-volume-up"></i></button>
+                                Tem dúvidas sobre como guardar pilhas velhas ou o que fazer com aparelhos quebrados?
+                                Aprenda as regras simples para organizar tudo com segurança antes de levar ao ecoponto.
+                                <button class="speaker-btn" aria-label="Ouvir descrição"><i
+                                        class="bi bi-volume-up"></i></button>
                             </p>
                         </div>
-                        <button class="btn btn-success w-100 mt-3 tts-readable" onclick="showSection('descarte')" aria-label="Ver guia de separação de lixo eletrônico">
+                        <button class="btn btn-success w-100 mt-3 tts-readable" onclick="showSection('descarte')"
+                            aria-label="Ver guia de separação de lixo eletrônico">
                             Ver Passo a Passo
                         </button>
                     </div>
@@ -178,14 +205,18 @@
                             <div class="fs-1 text-emerald mb-3"><i class="bi bi-heart-pulse text-success"></i></div>
                             <h3 class="h5 fw-bold tts-readable">
                                 Calcular Impacto Ecológico
-                                <button class="speaker-btn" aria-label="Ouvir título"><i class="bi bi-volume-up"></i></button>
+                                <button class="speaker-btn" aria-label="Ouvir título"><i
+                                        class="bi bi-volume-up"></i></button>
                             </h3>
                             <p class="text-secondary tts-readable">
-                                Simule o descarte de seus aparelhos e veja quanta água e solo você salva da contaminação imediata. Veja os dados acumulados de economia ecológica em Bandeirantes!
-                                <button class="speaker-btn" aria-label="Ouvir descrição"><i class="bi bi-volume-up"></i></button>
+                                Simule o descarte de seus aparelhos e veja quanta água e solo você salva da contaminação
+                                imediata. Veja os dados acumulados de economia ecológica em Bandeirantes!
+                                <button class="speaker-btn" aria-label="Ouvir descrição"><i
+                                        class="bi bi-volume-up"></i></button>
                             </p>
                         </div>
-                        <button class="btn btn-success w-100 mt-3 tts-readable" onclick="showSection('dashboard')" aria-label="Calcular meu impacto ecológico no painel">
+                        <button class="btn btn-success w-100 mt-3 tts-readable" onclick="showSection('dashboard')"
+                            aria-label="Calcular meu impacto ecológico no painel">
                             Calcular Meu Impacto
                         </button>
                     </div>
@@ -201,11 +232,17 @@
                     <div class="col-md-9">
                         <h3 class="h4 fw-bold tts-readable">
                             Por que o Lixo Eletrônico é perigoso?
-                            <button class="speaker-btn" aria-label="Ouvir título"><i class="bi bi-volume-up"></i></button>
+                            <button class="speaker-btn" aria-label="Ouvir título"><i
+                                    class="bi bi-volume-up"></i></button>
                         </h3>
                         <p class="tts-readable text-secondary">
-                            Aparelhos eletrônicos como pilhas, carregadores e celulares possuem metais pesados em seu interior (chumbo, mercúrio e cádmio). Se jogados no lixo comum, a chuva lava esses componentes, levando esses metais perigosos para os lençóis de água subterrâneos e contaminando o solo onde plantamos alimentos. Na nossa cidade de Bandeirantes, pequenas ações protegem nosso ribeirão e nossa agricultura!
-                            <button class="speaker-btn" aria-label="Ouvir descrição sobre perigo do lixo eletrônico"><i class="bi bi-volume-up"></i></button>
+                            Aparelhos eletrônicos como pilhas, carregadores e celulares possuem metais pesados em seu
+                            interior (chumbo, mercúrio e cádmio). Se jogados no lixo comum, a chuva lava esses
+                            componentes, levando esses metais perigosos para os lençóis de água subterrâneos e
+                            contaminando o solo onde plantamos alimentos. Na nossa cidade de Bandeirantes, pequenas
+                            ações protegem nosso ribeirão e nossa agricultura!
+                            <button class="speaker-btn" aria-label="Ouvir descrição sobre perigo do lixo eletrônico"><i
+                                    class="bi bi-volume-up"></i></button>
                         </p>
                     </div>
                 </div>
@@ -214,17 +251,19 @@
 
         <!-- SECTION: COMO DESCARTAR E PONTOS DE COLETA (INTEGRATED) -->
         <section id="descarte" class="app-section" aria-labelledby="title-descarte">
-            
+
             <!-- A. Step-by-Step Guide Wrapper -->
             <div id="descarte-guide-wrapper">
                 <div class="mb-4">
                     <h1 id="title-descarte" class="fw-bold tts-readable">
                         Como preparar e separar o lixo eletrônico?
-                        <button class="speaker-btn" aria-label="Ouvir título da seção"><i class="bi bi-volume-up"></i></button>
+                        <button class="speaker-btn" aria-label="Ouvir título da seção"><i
+                                class="bi bi-volume-up"></i></button>
                     </h1>
                     <p class="text-secondary tts-readable lead">
                         Siga o nosso guia prático para garantir um descarte seguro para você e para os coletores.
-                        <button class="speaker-btn" aria-label="Ouvir subtítulo da seção"><i class="bi bi-volume-up"></i></button>
+                        <button class="speaker-btn" aria-label="Ouvir subtítulo da seção"><i
+                                class="bi bi-volume-up"></i></button>
                     </p>
                 </div>
 
@@ -233,27 +272,40 @@
                         <div class="eco-card">
                             <h2 class="h4 fw-bold text-success mb-4 tts-readable">
                                 Passo a Passo de Preparação:
-                                <button class="speaker-btn" aria-label="Ouvir título do passo a passo"><i class="bi bi-volume-up"></i></button>
+                                <button class="speaker-btn" aria-label="Ouvir título do passo a passo"><i
+                                        class="bi bi-volume-up"></i></button>
                             </h2>
-                            
+
                             <div class="mb-4 tts-readable">
-                                <h3 class="h6 fw-bold mb-1"><i class="bi bi-1-circle text-emerald"></i> 1. Remova Pilhas e Baterias</h3>
-                                <p class="small text-secondary">Se o aparelho possuir pilhas ou baterias removíveis (como controles ou brinquedos), tire-as. Guarde-as em um pote de plástico seco separado.</p>
+                                <h3 class="h6 fw-bold mb-1"><i class="bi bi-1-circle text-emerald"></i> 1. Remova Pilhas
+                                    e Baterias</h3>
+                                <p class="small text-secondary">Se o aparelho possuir pilhas ou baterias removíveis
+                                    (como controles ou brinquedos), tire-as. Guarde-as em um pote de plástico seco
+                                    separado.</p>
                             </div>
-                            
+
                             <div class="mb-4 tts-readable">
-                                <h3 class="h6 fw-bold mb-1"><i class="bi bi-2-circle text-emerald"></i> 2. Proteja Partes Quebradas</h3>
-                                <p class="small text-secondary">Se a tela da TV, monitor ou celular estiver quebrada, embrulhe o aparelho em jornal ou plástico bolha para evitar cortes nos trabalhadores da coleta.</p>
+                                <h3 class="h6 fw-bold mb-1"><i class="bi bi-2-circle text-emerald"></i> 2. Proteja
+                                    Partes Quebradas</h3>
+                                <p class="small text-secondary">Se a tela da TV, monitor ou celular estiver quebrada,
+                                    embrulhe o aparelho em jornal ou plástico bolha para evitar cortes nos trabalhadores
+                                    da coleta.</p>
                             </div>
-                            
+
                             <div class="mb-4 tts-readable">
-                                <h3 class="h6 fw-bold mb-1"><i class="bi bi-3-circle text-emerald"></i> 3. Apague seus Dados Pessoais</h3>
-                                <p class="small text-secondary">Em computadores ou celulares, lembre-se de resetar o aparelho para os padrões de fábrica ou retirar cartões de memória para proteger sua privacidade.</p>
+                                <h3 class="h6 fw-bold mb-1"><i class="bi bi-3-circle text-emerald"></i> 3. Apague seus
+                                    Dados Pessoais</h3>
+                                <p class="small text-secondary">Em computadores ou celulares, lembre-se de resetar o
+                                    aparelho para os padrões de fábrica ou retirar cartões de memória para proteger sua
+                                    privacidade.</p>
                             </div>
-                            
+
                             <div class="mb-0 tts-readable">
-                                <h3 class="h6 fw-bold mb-1"><i class="bi bi-4-circle text-emerald"></i> 4. Mantenha em Local Seco</h3>
-                                <p class="small text-secondary">Até levar ao ecoponto, armazene o lixo eletrônico dentro de casa, protegido da chuva. A umidade oxida os circuitos e aumenta a liberação de poluentes.</p>
+                                <h3 class="h6 fw-bold mb-1"><i class="bi bi-4-circle text-emerald"></i> 4. Mantenha em
+                                    Local Seco</h3>
+                                <p class="small text-secondary">Até levar ao ecoponto, armazene o lixo eletrônico dentro
+                                    de casa, protegido da chuva. A umidade oxida os circuitos e aumenta a liberação de
+                                    poluentes.</p>
                             </div>
                         </div>
                     </div>
@@ -262,9 +314,10 @@
                         <div class="eco-card">
                             <h2 class="h4 fw-bold text-success mb-4 tts-readable">
                                 O que é aceito nos Ecopontos?
-                                <button class="speaker-btn" aria-label="Ouvir o que é aceito nos ecopontos"><i class="bi bi-volume-up"></i></button>
+                                <button class="speaker-btn" aria-label="Ouvir o que é aceito nos ecopontos"><i
+                                        class="bi bi-volume-up"></i></button>
                             </h2>
-                            
+
                             <div class="table-responsive">
                                 <table class="table table-dark table-hover align-middle border-secondary mb-0">
                                     <thead>
@@ -277,27 +330,32 @@
                                     <tbody>
                                         <tr>
                                             <td class="fw-bold tts-readable">Pequenos Aparelhos</td>
-                                            <td class="small text-secondary tts-readable">Celulares, tablets, carregadores, mouses, pilhas domésticas</td>
+                                            <td class="small text-secondary tts-readable">Celulares, tablets,
+                                                carregadores, mouses, pilhas domésticas</td>
                                             <td class="text-center"><span class="badge bg-success">SIM</span></td>
                                         </tr>
                                         <tr>
                                             <td class="fw-bold tts-readable">Informática</td>
-                                            <td class="small text-secondary tts-readable">Computadores, notebooks, monitores, teclados, cabos, placas</td>
+                                            <td class="small text-secondary tts-readable">Computadores, notebooks,
+                                                monitores, teclados, cabos, placas</td>
                                             <td class="text-center"><span class="badge bg-success">SIM</span></td>
                                         </tr>
                                         <tr>
                                             <td class="fw-bold tts-readable">Linha Branca</td>
-                                            <td class="small text-secondary tts-readable">Geladeiras, micro-ondas, fogões, liquidificadores antigos</td>
+                                            <td class="small text-secondary tts-readable">Geladeiras, micro-ondas,
+                                                fogões, liquidificadores antigos</td>
                                             <td class="text-center"><span class="badge bg-success">SIM</span></td>
                                         </tr>
                                         <tr>
                                             <td class="fw-bold tts-readable">Baterias Automotivas</td>
-                                            <td class="small text-secondary tts-readable">Baterias de carro/moto (devolver em mecânicas/lojas)</td>
+                                            <td class="small text-secondary tts-readable">Baterias de carro/moto
+                                                (devolver em mecânicas/lojas)</td>
                                             <td class="text-center"><span class="badge bg-danger">NÃO</span></td>
                                         </tr>
                                         <tr>
                                             <td class="fw-bold tts-readable">Lâmpadas</td>
-                                            <td class="small text-secondary tts-readable">Lâmpadas fluorescentes comum (coletores de vidro/reciclagem especial)</td>
+                                            <td class="small text-secondary tts-readable">Lâmpadas fluorescentes comum
+                                                (coletores de vidro/reciclagem especial)</td>
                                             <td class="text-center"><span class="badge bg-danger">NÃO</span></td>
                                         </tr>
                                     </tbody>
@@ -313,26 +371,31 @@
                 <div class="mb-4">
                     <h2 id="title-pontos" class="fw-bold tts-readable text-success">
                         Pontos de Coleta em Bandeirantes - PR
-                        <button class="speaker-btn" aria-label="Ouvir título da seção de mapas"><i class="bi bi-volume-up"></i></button>
+                        <button class="speaker-btn" aria-label="Ouvir título da seção de mapas"><i
+                                class="bi bi-volume-up"></i></button>
                     </h2>
                     <p class="text-secondary tts-readable lead">
-                        Selecione um ponto na lista abaixo para localizá-lo no mapa interativo e ver seus detalhes de entrega.
-                        <button class="speaker-btn" aria-label="Ouvir instruções do mapa"><i class="bi bi-volume-up"></i></button>
+                        Selecione um ponto na lista abaixo para localizá-lo no mapa interativo e ver seus detalhes de
+                        entrega.
+                        <button class="speaker-btn" aria-label="Ouvir instruções do mapa"><i
+                                class="bi bi-volume-up"></i></button>
                     </p>
                 </div>
 
                 <div class="row g-4">
                     <!-- Left Sidebar: Points Card List -->
                     <div class="col-lg-5 col-md-12">
-                        <div id="point-list" class="point-list-group" role="list" aria-label="Lista de postos de coleta de lixo eletrônico em Bandeirantes">
+                        <div id="point-list" class="point-list-group" role="list"
+                            aria-label="Lista de postos de coleta de lixo eletrônico em Bandeirantes">
                             <!-- Dynamically filled by JS -->
                         </div>
                     </div>
-                    
+
                     <!-- Right Map Container -->
                     <div class="col-lg-7 col-md-12">
                         <div class="eco-card p-2">
-                            <div id="map-container" role="application" aria-label="Mapa interativo mostrando ecopontos em Bandeirantes, PR">
+                            <div id="map-container" role="application"
+                                aria-label="Mapa interativo mostrando ecopontos em Bandeirantes, PR">
                                 <!-- Map container -->
                             </div>
                         </div>
@@ -346,11 +409,14 @@
             <div class="mb-4">
                 <h1 id="title-dashboard" class="fw-bold tts-readable">
                     Painel de Impacto Ambiental
-                    <button class="speaker-btn" aria-label="Ouvir título do painel de impacto"><i class="bi bi-volume-up"></i></button>
+                    <button class="speaker-btn" aria-label="Ouvir título do painel de impacto"><i
+                            class="bi bi-volume-up"></i></button>
                 </h1>
                 <p class="text-secondary tts-readable lead">
-                    Nossos dados mostram o impacto positivo do descarte correto em uma simulação baseada em nossa cidade de 30.000 habitantes.
-                    <button class="speaker-btn" aria-label="Ouvir descrição dos dados"><i class="bi bi-volume-up"></i></button>
+                    Nossos dados mostram o impacto positivo do descarte correto em uma simulação baseada em nossa cidade
+                    de 30.000 habitantes.
+                    <button class="speaker-btn" aria-label="Ouvir descrição dos dados"><i
+                            class="bi bi-volume-up"></i></button>
                 </p>
             </div>
 
@@ -361,18 +427,20 @@
                         <div class="small text-secondary tts-readable">Lixo Eletrônico Coletado (Acumulado)</div>
                         <div class="fs-2 fw-bold text-success my-1 tts-readable">
                             12,8 toneladas
-                            <button class="speaker-btn" aria-label="Ouvir dados"><i class="bi bi-volume-up"></i></button>
+                            <button class="speaker-btn" aria-label="Ouvir dados"><i
+                                    class="bi bi-volume-up"></i></button>
                         </div>
                         <div class="small text-secondary">Divergido de aterros sanitários locais</div>
                     </div>
                 </div>
-                
+
                 <div class="col-md-4">
                     <div class="eco-card dash-stat-card warning">
                         <div class="small text-secondary tts-readable">Água Protegida de Contaminação</div>
                         <div class="fs-2 fw-bold text-warning my-1 tts-readable">
                             32,5 milhões de litros
-                            <button class="speaker-btn" aria-label="Ouvir dados de água"><i class="bi bi-volume-up"></i></button>
+                            <button class="speaker-btn" aria-label="Ouvir dados de água"><i
+                                    class="bi bi-volume-up"></i></button>
                         </div>
                         <div class="small text-secondary">Prevenindo infiltração nos lençóis freáticos</div>
                     </div>
@@ -383,7 +451,8 @@
                         <div class="small text-secondary tts-readable">Solo Protegido de Metais Pesados</div>
                         <div class="fs-2 fw-bold text-danger my-1 tts-readable">
                             14,2 mil m²
-                            <button class="speaker-btn" aria-label="Ouvir dados de solo"><i class="bi bi-volume-up"></i></button>
+                            <button class="speaker-btn" aria-label="Ouvir dados de solo"><i
+                                    class="bi bi-volume-up"></i></button>
                         </div>
                         <div class="small text-secondary">Segurança ecológica para plantio em Bandeirantes</div>
                     </div>
@@ -394,19 +463,27 @@
             <div class="eco-card mb-5">
                 <h2 class="h4 fw-bold text-success mb-4 tts-readable text-center">
                     Simulador de Descarte: Calcule Seu Impacto Positivo
-                    <button class="speaker-btn" aria-label="Ouvir título da calculadora"><i class="bi bi-volume-up"></i></button>
+                    <button class="speaker-btn" aria-label="Ouvir título da calculadora"><i
+                            class="bi bi-volume-up"></i></button>
                 </h2>
-                
+
                 <div class="row g-4">
                     <!-- Left: Sliders selector -->
                     <div class="col-lg-6">
-                        <p class="text-secondary small tts-readable">Arraste os controles abaixo para indicar a quantidade de eletrônicos que você planeja descartar e veja os benefícios ecológicos mudarem em tempo real:</p>
-                        
+                        <p class="text-secondary small tts-readable">Arraste os controles abaixo para indicar a
+                            quantidade de eletrônicos que você planeja descartar e veja os benefícios ecológicos mudarem
+                            em tempo real:</p>
+
                         <!-- Battery -->
                         <div class="mb-3 row align-items-center">
-                            <div class="col-12 d-flex justify-content-between mb-1">
-                                <label for="calc-pilha" class="fw-bold small">Pilhas / Baterias Portáteis (unidades):</label>
-                                <span id="calc-pilha-qty" class="badge bg-success">0</span>
+                            <div class="col-12 d-flex justify-content-between mb-1 tts-readable">
+                                <label for="calc-pilha" class="fw-bold small">Pilhas / Baterias Portáteis
+                                    (unidades):</label>
+                                <span>
+                                    <span id="calc-pilha-qty" class="badge bg-success">0</span>
+                                    <button class="speaker-btn ms-1" aria-label="Ouvir quantidade de pilhas"><i
+                                            class="bi bi-volume-up"></i></button>
+                                </span>
                             </div>
                             <div class="col-12">
                                 <input type="range" class="calc-slider" id="calc-pilha" min="0" max="50" value="0">
@@ -415,9 +492,14 @@
 
                         <!-- Cellphone -->
                         <div class="mb-3 row align-items-center">
-                            <div class="col-12 d-flex justify-content-between mb-1">
-                                <label for="calc-celular" class="fw-bold small">Celulares / Tablets velhos (unidades):</label>
-                                <span id="calc-celular-qty" class="badge bg-success">0</span>
+                            <div class="col-12 d-flex justify-content-between mb-1 tts-readable">
+                                <label for="calc-celular" class="fw-bold small">Celulares / Tablets velhos
+                                    (unidades):</label>
+                                <span>
+                                    <span id="calc-celular-qty" class="badge bg-success">0</span>
+                                    <button class="speaker-btn ms-1" aria-label="Ouvir quantidade de celulares"><i
+                                            class="bi bi-volume-up"></i></button>
+                                </span>
                             </div>
                             <div class="col-12">
                                 <input type="range" class="calc-slider" id="calc-celular" min="0" max="10" value="0">
@@ -426,9 +508,14 @@
 
                         <!-- Computers -->
                         <div class="mb-3 row align-items-center">
-                            <div class="col-12 d-flex justify-content-between mb-1">
-                                <label for="calc-computador" class="fw-bold small">Computadores / Notebooks (unidades):</label>
-                                <span id="calc-computador-qty" class="badge bg-success">0</span>
+                            <div class="col-12 d-flex justify-content-between mb-1 tts-readable">
+                                <label for="calc-computador" class="fw-bold small">Computadores / Notebooks
+                                    (unidades):</label>
+                                <span>
+                                    <span id="calc-computador-qty" class="badge bg-success">0</span>
+                                    <button class="speaker-btn ms-1" aria-label="Ouvir quantidade de computadores"><i
+                                            class="bi bi-volume-up"></i></button>
+                                </span>
                             </div>
                             <div class="col-12">
                                 <input type="range" class="calc-slider" id="calc-computador" min="0" max="5" value="0">
@@ -437,9 +524,13 @@
 
                         <!-- TV -->
                         <div class="mb-3 row align-items-center">
-                            <div class="col-12 d-flex justify-content-between mb-1">
+                            <div class="col-12 d-flex justify-content-between mb-1 tts-readable">
                                 <label for="calc-tv" class="fw-bold small">Monitores / TVs antigas (unidades):</label>
-                                <span id="calc-tv-qty" class="badge bg-success">0</span>
+                                <span>
+                                    <span id="calc-tv-qty" class="badge bg-success">0</span>
+                                    <button class="speaker-btn ms-1" aria-label="Ouvir quantidade de televisores"><i
+                                            class="bi bi-volume-up"></i></button>
+                                </span>
                             </div>
                             <div class="col-12">
                                 <input type="range" class="calc-slider" id="calc-tv" min="0" max="5" value="0">
@@ -448,9 +539,14 @@
 
                         <!-- Fridge/Appliances -->
                         <div class="mb-3 row align-items-center">
-                            <div class="col-12 d-flex justify-content-between mb-1">
-                                <label for="calc-geladeira" class="fw-bold small">Grandes Eletrodomésticos / Geladeiras (unid):</label>
-                                <span id="calc-geladeira-qty" class="badge bg-success">0</span>
+                            <div class="col-12 d-flex justify-content-between mb-1 tts-readable">
+                                <label for="calc-geladeira" class="fw-bold small">Grandes Eletrodomésticos / Geladeiras
+                                    (unid):</label>
+                                <span>
+                                    <span id="calc-geladeira-qty" class="badge bg-success">0</span>
+                                    <button class="speaker-btn ms-1" aria-label="Ouvir quantidade de geladeiras"><i
+                                            class="bi bi-volume-up"></i></button>
+                                </span>
                             </div>
                             <div class="col-12">
                                 <input type="range" class="calc-slider" id="calc-geladeira" min="0" max="3" value="0">
@@ -458,7 +554,8 @@
                         </div>
 
                         <div class="text-end">
-                            <button id="btn-reset-calc" class="btn btn-outline-danger btn-sm mt-3 tts-readable" aria-label="Limpar dados do simulador">
+                            <button id="btn-reset-calc" class="btn btn-outline-danger btn-sm mt-3 tts-readable"
+                                aria-label="Limpar dados do simulador">
                                 <i class="bi bi-trash"></i> Limpar Escolhas
                             </button>
                         </div>
@@ -467,41 +564,67 @@
                     <!-- Right: Dynamic visual report metrics -->
                     <div class="col-lg-6 d-flex flex-column justify-content-center">
                         <div class="border border-secondary rounded-3 p-4 bg-dark">
-                            <h3 class="h5 fw-bold text-center text-light mb-3">Seu Impacto Ecológico Estimado:</h3>
-                            
+                            <h3 class="h5 fw-bold text-center text-light mb-3 tts-readable">
+                                Seu Impacto Ecológico Estimado:
+                                <button class="speaker-btn" aria-label="Ouvir impacto ecológico estimado"><i
+                                        class="bi bi-volume-up"></i></button>
+                            </h3>
+
                             <div class="row g-3">
                                 <div class="col-6">
-                                    <div class="metric-box">
+                                    <div class="metric-box tts-readable">
                                         <div class="small text-secondary">Peso Coletado</div>
-                                        <div id="metric-weight" class="metric-value">0 kg</div>
+                                        <div class="d-flex align-items-center justify-content-center gap-1">
+                                            <div id="metric-weight" class="metric-value">0 kg</div>
+                                            <button class="speaker-btn" aria-label="Ouvir peso coletado"><i
+                                                    class="bi bi-volume-up"></i></button>
+                                        </div>
                                         <div class="small text-secondary">Matéria Reciclada</div>
                                     </div>
                                 </div>
                                 <div class="col-6">
-                                    <div class="metric-box">
+                                    <div class="metric-box tts-readable">
                                         <div class="small text-secondary">Água Limpa Salva</div>
-                                        <div id="metric-water" class="metric-value text-warning">0 L</div>
+                                        <div class="d-flex align-items-center justify-content-center gap-1">
+                                            <div id="metric-water" class="metric-value text-warning">0 L</div>
+                                            <button class="speaker-btn" aria-label="Ouvir água limpa salva"><i
+                                                    class="bi bi-volume-up"></i></button>
+                                        </div>
                                         <div class="small text-secondary">Sem contaminação</div>
                                     </div>
                                 </div>
                                 <div class="col-6">
-                                    <div class="metric-box">
+                                    <div class="metric-box tts-readable">
                                         <div class="small text-secondary">Solo Protegido</div>
-                                        <div id="metric-soil" class="metric-value text-danger">0 m²</div>
+                                        <div class="d-flex align-items-center justify-content-center gap-1">
+                                            <div id="metric-soil" class="metric-value text-danger">0 m²</div>
+                                            <button class="speaker-btn" aria-label="Ouvir área de solo protegido"><i
+                                                    class="bi bi-volume-up"></i></button>
+                                        </div>
                                         <div class="small text-secondary">Sem chumbo/mercúrio</div>
                                     </div>
                                 </div>
                                 <div class="col-6">
-                                    <div class="metric-box">
+                                    <div class="metric-box tts-readable">
                                         <div class="small text-secondary">Recuperação Salva</div>
-                                        <div id="metric-recovery" class="metric-value text-info">0 anos</div>
+                                        <div class="d-flex align-items-center justify-content-center gap-1">
+                                            <div id="metric-recovery" class="metric-value text-info">0 anos</div>
+                                            <button class="speaker-btn"
+                                                aria-label="Ouvir tempo de recuperação salvo em ecossistemas"><i
+                                                    class="bi bi-volume-up"></i></button>
+                                        </div>
                                         <div class="small text-secondary">Em ecossistemas</div>
                                     </div>
                                 </div>
                                 <div class="col-12">
-                                    <div class="metric-box py-2">
-                                        <span class="small text-secondary">Tempo estimado de degradação evitado no solo comum: </span>
+                                    <div
+                                        class="metric-box py-2 tts-readable d-flex align-items-center justify-content-center gap-2">
+                                        <span class="small text-secondary">Tempo estimado de degradação evitado no solo
+                                            comum: </span>
                                         <strong id="metric-degradation" class="text-success">0 anos</strong>
+                                        <button class="speaker-btn"
+                                            aria-label="Ouvir tempo estimado de degradação evitado"><i
+                                                class="bi bi-volume-up"></i></button>
                                     </div>
                                 </div>
                             </div>
@@ -514,19 +637,32 @@
             <div class="row g-4">
                 <div class="col-lg-6">
                     <div class="eco-card" style="min-height: 350px;">
-                        <h3 class="h5 fw-bold text-center mb-3 tts-readable">Histórico de Descarte Mensal em Bandeirantes (Simulação)</h3>
+                        <h3 class="h5 fw-bold text-center mb-3 tts-readable"
+                            aria-label="Gráfico de barras mostrando o histórico de descarte mensal em Bandeirantes: Janeiro 1200 kg, Fevereiro 1450 kg, Março 1100 kg, Abril 1850 kg, Maio 2200 kg, Junho 2650 kg">
+                            Histórico de Descarte Mensal em Bandeirantes (Simulação)
+                            <button class="speaker-btn" aria-label="Ouvir dados do histórico de descarte mensal"><i
+                                    class="bi bi-volume-up"></i></button>
+                        </h3>
                         <div style="position: relative; height: 280px; width: 100%;">
-                            <canvas id="collectedChart"></canvas>
+                            <canvas id="collectedChart" class="tts-readable"
+                                aria-label="Gráfico de barras mostrando o histórico de descarte mensal em Bandeirantes: Janeiro 1200 kg, Fevereiro 1450 kg, Março 1100 kg, Abril 1850 kg, Maio 2200 kg, Junho 2650 kg"></canvas>
                         </div>
                     </div>
                 </div>
-                
+
                 <div class="col-lg-6">
                     <div class="eco-card" style="min-height: 350px;">
-                        <h3 class="h5 fw-bold text-center mb-1 tts-readable">Materiais Recuperados por Reciclagem (%)</h3>
-                        <p class="text-secondary small text-center mb-3 tts-readable">Este gráfico representa a proporção média de materiais recuperados do total acumulado de lixo eletrônico coletado.</p>
+                        <h3 class="h5 fw-bold text-center mb-1 tts-readable"
+                            aria-label="Gráfico de pizza mostrando materiais recuperados por reciclagem: Plásticos 42%, Metais Ferrosos 35%, Cobre 12%, Alumínio 8%, Metais Preciosos (Ouro e Prata) 3%">
+                            Materiais Recuperados por Reciclagem (%)
+                            <button class="speaker-btn" aria-label="Ouvir dados do gráfico de materiais recuperados"><i
+                                    class="bi bi-volume-up"></i></button>
+                        </h3>
+                        <p class="text-secondary small text-center mb-3 tts-readable">Este gráfico representa a
+                            proporção média de materiais recuperados do total acumulado de lixo eletrônico coletado.</p>
                         <div style="position: relative; height: 280px; width: 100%;">
-                            <canvas id="materialsChart"></canvas>
+                            <canvas id="materialsChart" class="tts-readable"
+                                aria-label="Gráfico de pizza mostrando materiais recuperados por reciclagem: Plásticos 42%, Metais Ferrosos 35%, Cobre 12%, Alumínio 8%, Metais Preciosos (Ouro e Prata) 3%"></canvas>
                         </div>
                     </div>
                 </div>
@@ -538,27 +674,37 @@
             <div class="eco-hero bg-dark text-white p-5 rounded-4 mb-4">
                 <h1 id="title-sobre" class="fw-bold mb-3 tts-readable">
                     Sobre o Projeto EcoPontos Bandeirantes
-                    <button class="speaker-btn" aria-label="Ouvir título da página sobre"><i class="bi bi-volume-up"></i></button>
+                    <button class="speaker-btn" aria-label="Ouvir título da página sobre"><i
+                            class="bi bi-volume-up"></i></button>
                 </h1>
                 <p class="lead tts-readable mb-4">
-                    Este portal é uma iniciativa estudantil sem fins lucrativos desenvolvida para o trabalho final de curso na Faculdade de Bandeirantes - Paraná.
-                    <button class="speaker-btn" aria-label="Ouvir descrição acadêmica"><i class="bi bi-volume-up"></i></button>
+                    Este portal é um software desenvolvido para o projeto final de Interação Humano-Computador.
+                    <button class="speaker-btn" aria-label="Ouvir descrição acadêmica"><i
+                            class="bi bi-volume-up"></i></button>
                 </p>
                 <hr class="border-secondary my-4">
-                
+
                 <div class="row g-4">
                     <div class="col-md-6">
                         <h3 class="h5 fw-bold text-success tts-readable">Inclusão Digital e IHC</h3>
                         <p class="small text-secondary tts-readable">
-                            O design foi construído seguindo diretrizes estritas de IHC (Interação Humano-Computador) e IHD (Inclusão Humano-Computador) para apoiar idosos (Dona Lurdes), professores (João Carlos) e jovens conectados (Mariana). Oferecemos leitor integrado para pessoas com deficiência visual leve, e controle por voz sem necessidade de softwares especiais.
-                            <button class="speaker-btn" aria-label="Ouvir sobre inclusão digital"><i class="bi bi-volume-up"></i></button>
+                            O design foi construído seguindo algumas diretrizes de IHC (Interação Humano-Computador) e
+                            IHD (Interação Humano-Dados) para informar usuários leigos, usuários com pouco conhecimento
+                            e usuários que desejam iniciar uma vida mais ecologicamente correta. Oferecemos leitor
+                            integrado para pessoas com deficiência visual leve, um modo de alto contraste, controle de
+                            tamanho de fonte e controle por voz sem necessidade de softwares especiais.
+                            <button class="speaker-btn" aria-label="Ouvir sobre inclusão digital"><i
+                                    class="bi bi-volume-up"></i></button>
                         </p>
                     </div>
                     <div class="col-md-6">
                         <h3 class="h5 fw-bold text-success tts-readable">Transparência Ecológica</h3>
                         <p class="small text-secondary tts-readable">
-                            A simulação ambiental é projetada para o ecossistema e volumetria de Bandeirantes - PR (cerca de 30.000 habitantes). Os dados de impacto são derivados de pesquisas científicas sobre contaminação por baterias e placas de circuito integrado nos recursos hídricos.
-                            <button class="speaker-btn" aria-label="Ouvir sobre transparência"><i class="bi bi-volume-up"></i></button>
+                            A simulação ambiental é projetada para o ecossistema e volumetria de Bandeirantes - PR
+                            (cerca de 30 mil habitantes). Os dados de impacto são derivados de suposições/simulações
+                            feitas pela IA do Gemini.
+                            <button class="speaker-btn" aria-label="Ouvir sobre transparência"><i
+                                    class="bi bi-volume-up"></i></button>
                         </p>
                     </div>
                 </div>
@@ -568,9 +714,11 @@
             <div class="eco-card">
                 <h3 class="h5 fw-bold text-success mb-3 tts-readable">
                     Como comandar o site por voz?
-                    <button class="speaker-btn" aria-label="Ouvir instruções de comando por voz"><i class="bi bi-volume-up"></i></button>
+                    <button class="speaker-btn" aria-label="Ouvir instruções de comando por voz"><i
+                            class="bi bi-volume-up"></i></button>
                 </h3>
-                <p class="small text-secondary tts-readable">Ao clicar no microfone flutuante verde localizado no canto inferior direito da tela, dê comandos falados simples como:</p>
+                <p class="small text-secondary tts-readable">Ao clicar no microfone flutuante verde localizado no canto
+                    inferior direito da tela, dê comandos falados simples como:</p>
                 <div class="row g-3 small">
                     <div class="col-sm-6 col-md-4">
                         <div class="p-2 border border-secondary rounded bg-dark">
@@ -626,8 +774,9 @@
     <!-- Footer -->
     <footer role="contentinfo">
         <div class="container text-center">
-            <p class="mb-1 fw-bold text-white">&copy; 2026 EcoPontos Bandeirantes - PR</p>
-            <p class="mb-2 text-secondary small">Trabalho acadêmico de IHC e IHD. Sem fins lucrativos. Desenvolvido para fins didáticos.</p>
+            <p class="mb-1 fw-bold text-white">&copy; 2026 - EcoPontos, Bandeirantes - PR</p>
+            <p class="mb-2 text-secondary small">Trabalho acadêmico de IHC e IHD. Sem fins lucrativos. Desenvolvido para
+                fins didáticos.</p>
             <div class="d-flex justify-content-center gap-3 text-secondary small">
                 <span>Contatos fictícios: (43) 99999-0000 | contato@ecopontosbandeirantes.edu</span>
             </div>
@@ -636,14 +785,16 @@
 
     <!-- Bootstrap 5 Bundle JS -->
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
-    
+
     <!-- Leaflet JS for Map -->
-    <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js" integrity="sha256-20nQCchB9co0qIjJZRGuk2/Z9VM+kNiyxNV1lvTlZBo=" crossorigin=""></script>
-    
+    <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"
+        integrity="sha256-20nQCchB9co0qIjJZRGuk2/Z9VM+kNiyxNV1lvTlZBo=" crossorigin=""></script>
+
     <!-- Chart.js for Graphs -->
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
-    
+
     <!-- Core App JS (Relative Path for Github Pages) -->
     <script src="js/app.js"></script>
 </body>
+
 </html>

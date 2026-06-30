@@ -269,11 +269,16 @@ document.addEventListener('DOMContentLoaded', () => {
             e.stopPropagation();
             const parentElement = speakerBtn.closest('.tts-readable');
             if (parentElement) {
-                // Get sibling text content excluding the button itself
-                let clone = parentElement.cloneNode(true);
-                const buttonInClone = clone.querySelector('.speaker-btn');
-                if (buttonInClone) buttonInClone.remove();
-                speakText(clone.innerText);
+                const label = parentElement.getAttribute('aria-label');
+                if (label) {
+                    speakText(label);
+                } else {
+                    // Get sibling text content excluding the button itself
+                    let clone = parentElement.cloneNode(true);
+                    const buttonInClone = clone.querySelector('.speaker-btn');
+                    if (buttonInClone) buttonInClone.remove();
+                    speakText(clone.innerText);
+                }
             }
         }
     });
@@ -302,7 +307,7 @@ document.addEventListener('DOMContentLoaded', () => {
         const nestedSpeaker = clone.querySelector('.speaker-btn');
         if (nestedSpeaker) nestedSpeaker.remove();
 
-        const textToRead = clone.innerText || clone.getAttribute('aria-label') || '';
+        const textToRead = clone.getAttribute('aria-label') || clone.innerText || '';
         if (textToRead.trim()) {
             speakText(textToRead);
         }
@@ -800,7 +805,7 @@ document.addEventListener('DOMContentLoaded', () => {
             if (ttsActive) {
                 const id = slider.id.replace('calc-', '');
                 const qty = parseInt(slider.value);
-                const label = slider.closest('.col-12').querySelector('label').textContent.split('(')[0].trim();
+                const label = slider.closest('.mb-3').querySelector('label').textContent.split('(')[0].trim();
                 speakText(`${qty} unidades de ${label} selecionados.`);
             }
         });

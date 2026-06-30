@@ -18,7 +18,6 @@
 - Os números precisam ser alterados para refletir uma realidade mais próxima da cidade de Bandeirantes - PR;
 - Os números precisam ser adaptados, exemplo, 50.000.000 de litros terá que virar 50 milhoes de litros, etc;
 - No gráfico de "Materiais Preciosos Recuperados por Reciclagem (%)" precisa explicar o que significa esse gráfico, exemplo: O que essa porcentagem significa, a porcentagem total ou mensal?;
+- O modo de leitura (TTS) não está funcionando 100%, ele não lê os textos no gráfico de "Materiais Preciosos Recuperados por Reciclagem (%)", no gráfico de "Histórico de Descarte Mensal em Bandeirantes (Simulação)" e também não lê os textos dos itens a serem adicionados e os valores que serão exibidos no "Simulador de Descarte".
 
 **Todos os erros percebidos precisam ser corrigidos.**
-
-##
