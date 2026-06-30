@@ -4,7 +4,7 @@
 
 - O modo de alto contraste não está mudando todas as cores;
 - O modo de aumentar/diminuir a fonte não funciona corretamente, ela diminui apenas o tamanho da fonte de alguns textos;
-- No celular o botão de microfone não funciona corretamente, ele aparece mas não tem utilidade.
+- No celular o botão de microfone não funciona corretamente, ele aparece mas não tem utilidade, ele deve funcionar corretamente em dispositivos compatíveis.
 
 # Página inicial
 - Todos os botões na página inicial não estão redirecionando para as páginas corretas;
