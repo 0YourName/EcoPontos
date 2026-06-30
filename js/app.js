@@ -28,6 +28,15 @@ document.addEventListener('DOMContentLoaded', () => {
     const toastAccessibility = document.getElementById('accessibility-toast');
     const toastText = document.getElementById('toast-text');
 
+    // Check Speech Recognition support on load to hide the badge if unsupported
+    const SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition;
+    if (!SpeechRecognition) {
+        const voiceBadge = document.querySelector('.voice-assistant-badge');
+        if (voiceBadge) {
+            voiceBadge.style.display = 'none';
+        }
+    }
+
     // Simulated collection points data (Bandeirantes - PR)
     const pointsData = [
         {

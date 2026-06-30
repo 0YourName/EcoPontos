@@ -4,6 +4,7 @@
 
 - O modo de alto contraste não está mudando todas as cores;
 - O modo de aumentar/diminuir a fonte não funciona corretamente, ela diminui apenas o tamanho da fonte de alguns textos;
+- No celular o botão de microfone não funciona corretamente, ele aparece mas não tem utilidade.
 
 # Página inicial
 - Todos os botões na página inicial não estão redirecionando para as páginas corretas;
@@ -13,6 +14,7 @@
 - O modo de leitura (TTS) não está funcionando 100%, ele não lê os endereços quando escolho o local, apenas quando clico em ouvir endereço.
 - Os pontos de coleto estão nos endereços errados;
 - Os itens que esses pontos coletam precisam ser mais claros e objetivos, o que é permitido e o que não é;
+- No mapa, preciso ter a opção de ouvir o endereço, os itens que podem ser descartados e o nome do local, tudo usando o leitor de texto (TTS) de forma separada.
 
 # Página de dashboard
 - Os números precisam ser alterados para refletir uma realidade mais próxima da cidade de Bandeirantes - PR;
