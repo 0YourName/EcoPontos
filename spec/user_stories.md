@@ -114,3 +114,10 @@ Mariana se preocupa com o meio ambiente e gostaria de descartar corretamente o l
 * Falta de informação sobre os impactos ambientais do descarte incorreto de lixo eletrônico;
 * Sites com um texto fácil de se compreender para o compartilhamento entre amigos e parentes leigos sobre o assunto.
 
+## Necessidades
+
+* Informações sobre onde e como descartar lixo eletrônico;
+* Informações sobre a forma correta de se descartar;
+* Dashboard interativo mostrando os impactos ambientais do descarte correto e incorreto do lixo eletrônico;
+* Opção de compartilhar os locais de descarte e informações pelas redes sociais;
+* Opção de acompanhar de que forma o lixo eletrônico é descartado e seus impactos.

@@ -363,45 +363,144 @@
                             </div>
                         </div>
                     </div>
-                </div>
-            </div>
+                    <!-- Tracking Lifecycle (Persona 3 Need) -->
+                    <div class="eco-card my-5">
+                        <h2 class="h4 fw-bold text-success mb-4 text-center tts-readable">
+                            Acompanhe o Ciclo de Descarte e seus Impactos
+                            <button class="speaker-btn" aria-label="Ouvir título da linha do tempo do descarte"><i
+                                    class="bi bi-volume-up"></i></button>
+                        </h2>
+                        <p class="text-secondary text-center small mb-5 tts-readable">
+                            Veja o que acontece após você entregar seus aparelhos em um Ecoponto e como cada etapa ajuda
+                            a
+                            proteger o meio ambiente em Bandeirantes.
+                            <button class="speaker-btn" aria-label="Ouvir descrição"><i
+                                    class="bi bi-volume-up"></i></button>
+                        </p>
 
-            <!-- B. Integrated Map Wrapper (Shared between both tab views) -->
-            <div id="coleta-map-wrapper" class="mt-4">
-                <div class="mb-4">
-                    <h2 id="title-pontos" class="fw-bold tts-readable text-success">
-                        Pontos de Coleta em Bandeirantes - PR
-                        <button class="speaker-btn" aria-label="Ouvir título da seção de mapas"><i
-                                class="bi bi-volume-up"></i></button>
-                    </h2>
-                    <p class="text-secondary tts-readable lead">
-                        Selecione um ponto na lista abaixo para localizá-lo no mapa interativo e ver seus detalhes de
-                        entrega.
-                        <button class="speaker-btn" aria-label="Ouvir instruções do mapa"><i
-                                class="bi bi-volume-up"></i></button>
-                    </p>
-                </div>
+                        <div class="row g-4 tracking-timeline">
+                            <!-- Step 1 -->
+                            <div class="col-lg col-md-6 text-center position-relative">
+                                <div class="timeline-badge bg-success mb-3 mx-auto d-flex align-items-center justify-content-center text-white"
+                                    style="width: 50px; height: 50px; border-radius: 50%; font-size: 1.25rem;">
+                                    <i class="bi bi-geo-alt"></i>
+                                </div>
+                                <h4 class="h6 fw-bold mb-2 tts-readable">1. Ecoponto</h4>
+                                <p class="small text-secondary tts-readable">Você entrega o eletrônico em um ponto de
+                                    coleta em
+                                    Bandeirantes.</p>
+                                <div
+                                    class="alert alert-success p-2 mt-2 border-0 bg-opacity-10 text-success small tts-readable">
+                                    <strong>Evita:</strong> Contaminação imediata do solo e lençóis freáticos locais.
+                                </div>
+                            </div>
 
-                <div class="row g-4">
-                    <!-- Left Sidebar: Points Card List -->
-                    <div class="col-lg-5 col-md-12">
-                        <div id="point-list" class="point-list-group" role="list"
-                            aria-label="Lista de postos de coleta de lixo eletrônico em Bandeirantes">
-                            <!-- Dynamically filled by JS -->
-                        </div>
-                    </div>
+                            <!-- Step 2 -->
+                            <div class="col-lg col-md-6 text-center position-relative">
+                                <div class="timeline-badge bg-success mb-3 mx-auto d-flex align-items-center justify-content-center text-white"
+                                    style="width: 50px; height: 50px; border-radius: 50%; font-size: 1.25rem;">
+                                    <i class="bi bi-boxes"></i>
+                                </div>
+                                <h4 class="h6 fw-bold mb-2 tts-readable">2. Triagem</h4>
+                                <p class="small text-secondary tts-readable">Os aparelhos são agrupados e organizados
+                                    por tipo
+                                    de material.</p>
+                                <div
+                                    class="alert alert-success p-2 mt-2 border-0 bg-opacity-10 text-success small tts-readable">
+                                    <strong>Evita:</strong> Incêndios e vazamentos tóxicos por baterias danificadas.
+                                </div>
+                            </div>
 
-                    <!-- Right Map Container -->
-                    <div class="col-lg-7 col-md-12">
-                        <div class="eco-card p-2">
-                            <div id="map-container" role="application"
-                                aria-label="Mapa interativo mostrando ecopontos em Bandeirantes, PR">
-                                <!-- Map container -->
+                            <!-- Step 3 -->
+                            <div class="col-lg col-md-6 text-center position-relative">
+                                <div class="timeline-badge bg-success mb-3 mx-auto d-flex align-items-center justify-content-center text-white"
+                                    style="width: 50px; height: 50px; border-radius: 50%; font-size: 1.25rem;">
+                                    <i class="bi bi-truck"></i>
+                                </div>
+                                <h4 class="h6 fw-bold mb-2 tts-readable">3. Transporte</h4>
+                                <p class="small text-secondary tts-readable">Cargas consolidadas seguem para usinas
+                                    licenciadas
+                                    de reciclagem.</p>
+                                <div
+                                    class="alert alert-success p-2 mt-2 border-0 bg-opacity-10 text-success small tts-readable">
+                                    <strong>Evita:</strong> Transporte irregular que descarta resíduos na beira de
+                                    estradas.
+                                </div>
+                            </div>
+
+                            <!-- Step 4 -->
+                            <div class="col-lg col-md-6 text-center position-relative">
+                                <div class="timeline-badge bg-success mb-3 mx-auto d-flex align-items-center justify-content-center text-white"
+                                    style="width: 50px; height: 50px; border-radius: 50%; font-size: 1.25rem;">
+                                    <i class="bi bi-cpu"></i>
+                                </div>
+                                <h4 class="h6 fw-bold mb-2 tts-readable">4. Reciclagem</h4>
+                                <p class="small text-secondary tts-readable">Os componentes são triturados e fundidos
+                                    para
+                                    extrair metais raros.</p>
+                                <div
+                                    class="alert alert-success p-2 mt-2 border-0 bg-opacity-10 text-success small tts-readable">
+                                    <strong>Recupera:</strong> Ouro, prata e cobre que voltam para a fabricação de novas
+                                    peças.
+                                </div>
+                            </div>
+
+                            <!-- Step 5 -->
+                            <div class="col-lg col-md-6 text-center position-relative">
+                                <div class="timeline-badge bg-success mb-3 mx-auto d-flex align-items-center justify-content-center text-white"
+                                    style="width: 50px; height: 50px; border-radius: 50%; font-size: 1.25rem;">
+                                    <i class="bi bi-arrow-repeat"></i>
+                                </div>
+                                <h4 class="h6 fw-bold mb-2 tts-readable">5. Indústria</h4>
+                                <p class="small text-secondary tts-readable">Os novos insumos limpos são reintegrados ao
+                                    ciclo
+                                    produtivo.</p>
+                                <div
+                                    class="alert alert-success p-2 mt-2 border-0 bg-opacity-10 text-success small tts-readable">
+                                    <strong>Economiza:</strong> Diminui a mineração predatória de recursos da natureza.
+                                </div>
                             </div>
                         </div>
                     </div>
                 </div>
-            </div>
+
+                <!-- B. Integrated Map Wrapper (Shared between both tab views) -->
+                <div id="coleta-map-wrapper" class="mt-4">
+                    <div class="mb-4">
+                        <h2 id="title-pontos" class="fw-bold tts-readable text-success">
+                            Pontos de Coleta em Bandeirantes - PR
+                            <button class="speaker-btn" aria-label="Ouvir título da seção de mapas"><i
+                                    class="bi bi-volume-up"></i></button>
+                        </h2>
+                        <p class="text-secondary tts-readable lead">
+                            Selecione um ponto na lista abaixo para localizá-lo no mapa interativo e ver seus detalhes
+                            de
+                            entrega.
+                            <button class="speaker-btn" aria-label="Ouvir instruções do mapa"><i
+                                    class="bi bi-volume-up"></i></button>
+                        </p>
+                    </div>
+
+                    <div class="row g-4">
+                        <!-- Left Sidebar: Points Card List -->
+                        <div class="col-lg-5 col-md-12">
+                            <div id="point-list" class="point-list-group" role="list"
+                                aria-label="Lista de postos de coleta de lixo eletrônico em Bandeirantes">
+                                <!-- Dynamically filled by JS -->
+                            </div>
+                        </div>
+
+                        <!-- Right Map Container -->
+                        <div class="col-lg-7 col-md-12">
+                            <div class="eco-card p-2">
+                                <div id="map-container" role="application"
+                                    aria-label="Mapa interativo mostrando ecopontos em Bandeirantes, PR">
+                                    <!-- Map container -->
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
         </section>
 
         <!-- SECTION: DASHBOARD (ENVIRONMENTAL IMPACTS) -->
@@ -627,6 +726,13 @@
                                                 class="bi bi-volume-up"></i></button>
                                     </div>
                                 </div>
+                                <div class="col-12 mt-3">
+                                    <button id="btn-share-impact"
+                                        class="btn btn-success w-100 tts-readable d-flex align-items-center justify-content-center gap-2 py-2"
+                                        aria-label="Compartilhar meu impacto ecológico nas redes sociais">
+                                        <i class="bi bi-share-fill"></i> Compartilhar Meu Impacto
+                                    </button>
+                                </div>
                             </div>
                         </div>
                     </div>
@@ -666,7 +772,16 @@
                         </div>
                     </div>
                 </div>
-            </div>
+
+                <div class="row mt-4">
+                    <div class="col-12 text-center">
+                        <button id="btn-share-graphs"
+                            class="btn btn-success px-4 py-2 tts-readable d-inline-flex align-items-center gap-2"
+                            aria-label="Compartilhar dados dos gráficos de descarte e materiais reciclados">
+                            <i class="bi bi-share-fill"></i> Compartilhar Dados dos Gráficos
+                        </button>
+                    </div>
+                </div>
         </section>
 
         <!-- SECTION: SOBRE NÓS -->

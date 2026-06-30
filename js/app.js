@@ -677,16 +677,21 @@ document.addEventListener('DOMContentLoaded', () => {
                                 </ul>
                             </div>
                             
-                            <button class="speaker-btn mt-2" aria-label="Ouvir informações do ponto de descarte">
-                                <i class="bi bi-volume-up"></i> Ouvir endereço
-                            </button>
+                            <div class="d-flex flex-wrap gap-2 mt-3">
+                                <button class="btn btn-outline-light btn-sm speaker-btn d-inline-flex align-items-center gap-1" aria-label="Ouvir informações do ponto de descarte">
+                                    <i class="bi bi-volume-up"></i> Ouvir endereço
+                                </button>
+                                <button class="btn btn-outline-success btn-sm share-point-btn d-inline-flex align-items-center gap-1" aria-label="Compartilhar ecoponto" data-id="${point.id}">
+                                    <i class="bi bi-share"></i> Compartilhar
+                                </button>
+                            </div>
                         </div>
                     </div>
                 `;
 
                 card.addEventListener('click', (e) => {
-                    // Prevent map panning if clicking speaker button
-                    if (e.target.closest('.speaker-btn')) return;
+                    // Prevent map panning if clicking speaker button or share button
+                    if (e.target.closest('.speaker-btn') || e.target.closest('.share-point-btn')) return;
 
                     // Focus Marker on map
                     map.setView(point.coords, 16);
@@ -886,6 +891,81 @@ document.addEventListener('DOMContentLoaded', () => {
             if (ttsActive) {
                 speakText("Calculadora reiniciada.");
             }
+        });
+    }
+
+    // ----------------------------------------------------
+    // Social Sharing System (Persona 3 Feature)
+    // ----------------------------------------------------
+    function shareContent(title, text) {
+        const url = window.location.href;
+        if (navigator.share) {
+            navigator.share({
+                title: title,
+                text: text,
+                url: url
+            }).then(() => {
+                showToast("Compartilhado com sucesso!");
+            }).catch((err) => {
+                if (err.name !== 'AbortError') {
+                    fallbackShare(text);
+                }
+            });
+        } else {
+            fallbackShare(text);
+        }
+    }
+
+    function fallbackShare(text) {
+        const fullShareText = `${text} Acesse o site para ver mais: ${window.location.href}`;
+        navigator.clipboard.writeText(fullShareText).then(() => {
+            showToast("Copiado! Compartilhe nas suas redes sociais.");
+            if (ttsActive) {
+                speakText("Informações copiadas para a área de transferência. Compartilhe com seus amigos nas redes sociais.");
+            }
+        }).catch(err => {
+            console.error("Failed to copy text: ", err);
+            showToast("Não foi possível copiar o texto.");
+        });
+    }
+
+    // Share point of descarte click delegation
+    document.body.addEventListener('click', (e) => {
+        const shareBtn = e.target.closest('.share-point-btn');
+        if (shareBtn) {
+            e.stopPropagation();
+            const pointId = parseInt(shareBtn.getAttribute('data-id'));
+            const point = pointsData.find(p => p.id === pointId);
+            if (point) {
+                const shareText = `Encontrei um ponto de coleta de lixo eletrônico em Bandeirantes! EcoPonto: ${point.name} no endereço: ${point.address}. Funcionamento: ${point.hours}.`;
+                shareContent(point.name, shareText);
+            }
+        }
+    });
+
+    // Share environmental impact click handler
+    const btnShareImpact = document.getElementById('btn-share-impact');
+    if (btnShareImpact) {
+        btnShareImpact.addEventListener('click', () => {
+            const weightText = document.getElementById('metric-weight').textContent;
+            const waterText = document.getElementById('metric-water').textContent;
+            const soilText = document.getElementById('metric-soil').textContent;
+            const recoveryText = document.getElementById('metric-recovery').textContent;
+            
+            const shareText = `Fiz a simulação no EcoPontos Bandeirantes! Descartando meu lixo eletrônico corretamente, vou ajudar a reciclar ${weightText}, salvar ${waterText} de água limpa e proteger ${soilText} de solo contra contaminação! Pouparemos ${recoveryText} de recuperação na natureza. Faça sua parte você também!`;
+            
+            shareContent("Meu Impacto Ecológico - EcoPontos", shareText);
+        });
+    }
+
+    // Share graphs data click handler
+    const btnShareGraphs = document.getElementById('btn-share-graphs');
+    if (btnShareGraphs) {
+        btnShareGraphs.addEventListener('click', () => {
+            const shareText = `Dados de Sustentabilidade - EcoPontos Bandeirantes:\n` +
+                              `- Histórico de Descarte Mensal: Jan (1.200 kg), Fev (1.450 kg), Mar (1.100 kg), Abr (1.850 kg), Mai (2.200 kg), Jun (2.650 kg).\n` +
+                              `- Materiais Recuperados: Plásticos (42%), Metais Ferrosos (35%), Cobre (12%), Alumínio (8%), Metais Preciosos (3%).`;
+            shareContent("Dados de Sustentabilidade - EcoPontos", shareText);
         });
     }
 
