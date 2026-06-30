@@ -37,8 +37,18 @@ document.addEventListener('DOMContentLoaded', () => {
             address: "Rua Dino Veiga, s/n - Vila Maria Alice, Bandeirantes - PR",
             hours: "Sábado: 09h00 às 13h00",
             phone: "(43) 99122-3344",
-            allowed: ["Celulares e tablets", "Carregadores e cabos", "Pilhas e baterias portáteis", "Pequenos eletroportáteis"],
-            notAllowed: ["Lâmpadas fluorescentes", "Baterias automotivas", "Geladeiras e fogões grandes"],
+            allowed: [
+                "Celulares e tablets",
+                "Carregadores, cabos e fones",
+                "Pilhas e baterias de uso doméstico",
+                "Eletroportáteis pequenos (secador, liquidificador, etc.)"
+            ],
+            notAllowed: [
+                "Lâmpadas (entregar em coletores de vidro)",
+                "Baterias automotivas (devolver em lojas/oficinas)",
+                "Computadores e notebooks (descarte no ponto da UENP)",
+                "Grandes eletrodomésticos (descarte no ponto da Praça Brasil/Japão)"
+            ],
             icon: "bi-battery-charging"
         },
         {
@@ -48,8 +58,18 @@ document.addEventListener('DOMContentLoaded', () => {
             address: "Campus Luiz Meneghel - BR-369, s/n - Bandeirantes, PR",
             hours: "Segunda a Sexta: 08h00 às 21h00",
             phone: "(43) 99133-5566",
-            allowed: ["Computadores e notebooks", "Monitores e impressoras", "Teclados e mouses", "Cabos e placas de circuito"],
-            notAllowed: ["Lâmpadas fluorescentes", "Pilhas soltas", "Eletrodomésticos de grande porte"],
+            allowed: [
+                "Computadores, notebooks e gabinetes",
+                "Monitores de computador e impressoras",
+                "Mouses, teclados e periféricos",
+                "Cabos de dados e placas de circuito"
+            ],
+            notAllowed: [
+                "Lâmpadas fluorescentes (necessitam descarte especial)",
+                "Pilhas e baterias soltas (descarte no ponto do Parque do Povo)",
+                "Celulares e tablets (descarte no ponto do Parque do Povo)",
+                "Grandes eletrodomésticos (descarte no ponto da Praça Brasil/Japão)"
+            ],
             icon: "bi-laptop"
         },
         {
@@ -59,8 +79,18 @@ document.addEventListener('DOMContentLoaded', () => {
             address: "Praça Mal. Deodoro, s/n - Centro, Bandeirantes - PR",
             hours: "Sábado: 09h00 às 13h00",
             phone: "(43) 99144-7788",
-            allowed: ["Geladeiras e fogões", "Fornos e micro-ondas", "TVs e monitores grandes", "Ventiladores e ar-condicionado"],
-            notAllowed: ["Pilhas portáteis", "Baterias de carro", "Lâmpadas fluorescentes"],
+            allowed: [
+                "Geladeiras e fogões antigos",
+                "Fornos elétricos e micro-ondas",
+                "Televisores e monitores de TV",
+                "Ventiladores e aparelhos de ar-condicionado"
+            ],
+            notAllowed: [
+                "Pilhas e baterias portáteis (descarte no ponto do Parque do Povo)",
+                "Celulares e tablets (descarte no ponto do Parque do Povo)",
+                "Computadores e notebooks (descarte no ponto da UENP)",
+                "Lâmpadas fluorescentes (necessitam descarte especial)"
+            ],
             icon: "bi-tv"
         }
     ];
@@ -605,11 +635,11 @@ document.addEventListener('DOMContentLoaded', () => {
                             
                             <div class="mt-2 small border-top border-secondary pt-2">
                                 <span class="fw-bold d-block mb-1 text-light">Itens Permitidos:</span>
-                                <ul class="list-unstyled mb-2 ps-0 text-secondary row row-cols-2 g-1">
+                                <ul class="list-unstyled mb-2 ps-0 text-secondary row row-cols-1 g-1">
                                     ${sidebarAllowedItems}
                                 </ul>
                                 <span class="fw-bold d-block mb-1 text-light">Itens NÃO Permitidos:</span>
-                                <ul class="list-unstyled mb-0 ps-0 text-secondary row row-cols-2 g-1">
+                                <ul class="list-unstyled mb-0 ps-0 text-secondary row row-cols-1 g-1">
                                     ${sidebarNotAllowedItems}
                                 </ul>
                             </div>
