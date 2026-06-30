@@ -621,9 +621,4 @@ body.high-contrast select:focus {
     background: var(--accent-color);
 }
 
-/* Hide voice assistant badge on mobile devices */
-@media (max-width: 768px) {
-    .voice-assistant-badge {
-        display: none !important;
-    }
-}
+

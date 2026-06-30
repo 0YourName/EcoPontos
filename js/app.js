@@ -382,40 +382,57 @@ document.addEventListener('DOMContentLoaded', () => {
             return;
         }
 
-        recognition = new SpeechRecognition();
-        recognition.continuous = false;
-        recognition.lang = 'pt-BR';
-        recognition.interimResults = false;
-        recognition.maxAlternatives = 1;
+        try {
+            recognition = new SpeechRecognition();
+            recognition.continuous = false;
+            recognition.lang = 'pt-BR';
+            recognition.interimResults = false;
+            recognition.maxAlternatives = 1;
 
-        recognition.onstart = () => {
-            speechRecognitionActive = true;
-            btnVoiceToggle.classList.add('listening');
-            voiceStatusText.innerHTML = "<strong>Estou ouvindo...</strong> Fale um comando.";
-            voiceTooltip.classList.add('visible');
-            speakText(""); // Stop TTS when listening to avoid loops
-        };
+            recognition.onstart = () => {
+                speechRecognitionActive = true;
+                btnVoiceToggle.classList.add('listening');
+                voiceStatusText.innerHTML = "<strong>Estou ouvindo...</strong> Fale um comando.";
+                voiceTooltip.classList.add('visible');
+                speakText(""); // Stop TTS when listening to avoid loops
+            };
 
-        recognition.onerror = (e) => {
-            console.error("Speech recognition error", e);
-            stopListening();
-        };
+            recognition.onerror = (e) => {
+                console.error("Speech recognition error", e);
+                let errorMsg = "Erro no assistente de voz.";
+                
+                if (e.error === 'not-allowed') {
+                    errorMsg = "Acesso negado. Ative a permissão de microfone ou acesse via HTTPS.";
+                } else if (e.error === 'no-speech') {
+                    errorMsg = "Não entendi o comando. Tente novamente.";
+                } else if (e.error === 'network') {
+                    errorMsg = "Erro de rede no assistente de voz.";
+                } else {
+                    errorMsg = `Erro no microfone: ${e.error}`;
+                }
+                
+                showToast(errorMsg);
+                stopListening();
+            };
 
-        recognition.onend = () => {
-            stopListening();
-        };
+            recognition.onend = () => {
+                stopListening();
+            };
 
-        recognition.onresult = (e) => {
-            const transcript = e.results[0][0].transcript.toLowerCase().trim();
-            console.log("Heard:", transcript);
-            voiceStatusText.innerHTML = `Entendido: <strong>"${transcript}"</strong>`;
+            recognition.onresult = (e) => {
+                const transcript = e.results[0][0].transcript.toLowerCase().trim();
+                console.log("Heard:", transcript);
+                voiceStatusText.innerHTML = `Entendido: <strong>"${transcript}"</strong>`;
 
-            setTimeout(() => {
-                voiceTooltip.classList.remove('visible');
-            }, 2500);
+                setTimeout(() => {
+                    voiceTooltip.classList.remove('visible');
+                }, 2500);
 
-            handleVoiceCommand(transcript);
-        };
+                handleVoiceCommand(transcript);
+            };
+        } catch (err) {
+            console.error("Failed to initialize Speech Recognition:", err);
+        }
     }
 
     function stopListening() {
@@ -528,13 +545,20 @@ document.addEventListener('DOMContentLoaded', () => {
             initSpeechRecognition();
         }
 
+        if (!recognition) {
+            showToast("A pesquisa por voz não é suportada ou está bloqueada neste navegador.");
+            return;
+        }
+
         if (speechRecognitionActive) {
             recognition.stop();
         } else {
             try {
                 recognition.start();
             } catch (e) {
-                console.error(e);
+                console.error("Error starting speech recognition:", e);
+                showToast("Não foi possível iniciar o microfone. Certifique-se de usar HTTPS.");
+                stopListening();
             }
         }
     });
