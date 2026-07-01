@@ -854,14 +854,21 @@ document.addEventListener('DOMContentLoaded', () => {
             return `${sqm} m²`;
         };
 
-        const formatNumber = (num) => num.toLocaleString('pt-BR');
+        const formatYears = (years) => {
+            if (years >= 1000000) {
+                return `${(years / 1000000).toFixed(1).replace('.0', '').replace('.', ',')} milhões de`;
+            } else if (years >= 1000) {
+                return `${(years / 1000).toFixed(1).replace('.0', '').replace('.', ',')} mil`;
+            }
+            return years.toString();
+        };
 
         // Update DOM values
         document.getElementById('metric-weight').textContent = formatWeight(totalWeight);
         document.getElementById('metric-water').textContent = formatWater(totalWater);
         document.getElementById('metric-soil').textContent = formatSoil(totalSoil);
-        document.getElementById('metric-degradation').textContent = `Até ${formatNumber(totalDegradation)} anos`;
-        document.getElementById('metric-recovery').textContent = `${formatNumber(totalRecovery)} anos`;
+        document.getElementById('metric-degradation').textContent = `Até ${formatYears(totalDegradation)} anos`;
+        document.getElementById('metric-recovery').textContent = `${formatYears(totalRecovery)} anos`;
     }
 
     // Attach slider events
@@ -897,36 +904,217 @@ document.addEventListener('DOMContentLoaded', () => {
     // ----------------------------------------------------
     // Social Sharing System (Persona 3 Feature)
     // ----------------------------------------------------
-    function shareContent(title, text) {
-        const url = window.location.href;
-        if (navigator.share) {
+    function dataURLtoBlob(dataurl) {
+        const arr = dataurl.split(',');
+        const mime = arr[0].match(/:(.*?);/)[1];
+        const bstr = atob(arr[1]);
+        let n = bstr.length;
+        const u8arr = new Uint8Array(n);
+        while (n--) {
+            u8arr[n] = bstr.charCodeAt(n);
+        }
+        return new Blob([u8arr], { type: mime });
+    }
+
+    function shareImage(blob, filename, title, text) {
+        const file = new File([blob], filename, { type: 'image/png' });
+        if (navigator.canShare && navigator.canShare({ files: [file] })) {
             navigator.share({
+                files: [file],
                 title: title,
-                text: text,
-                url: url
-            }).then(() => {
-                showToast("Compartilhado com sucesso!");
-            }).catch((err) => {
+                text: text
+            }).catch(err => {
                 if (err.name !== 'AbortError') {
-                    fallbackShare(text);
+                    fallbackFileShare(blob, filename, text);
                 }
             });
         } else {
-            fallbackShare(text);
+            fallbackFileShare(blob, filename, text);
         }
     }
 
-    function fallbackShare(text) {
-        const fullShareText = `${text} Acesse o site para ver mais: ${window.location.href}`;
+    function fallbackFileShare(blob, filename, text) {
+        const url = URL.createObjectURL(blob);
+        const a = document.createElement('a');
+        a.href = url;
+        a.download = filename;
+        document.body.appendChild(a);
+        a.click();
+        document.body.removeChild(a);
+        URL.revokeObjectURL(url);
+
+        const fullShareText = `${text} Acesse o site: ${window.location.href}`;
         navigator.clipboard.writeText(fullShareText).then(() => {
-            showToast("Copiado! Compartilhe nas suas redes sociais.");
+            showToast("Imagem baixada e texto copiado! Compartilhe nas suas redes sociais.");
             if (ttsActive) {
-                speakText("Informações copiadas para a área de transferência. Compartilhe com seus amigos nas redes sociais.");
+                speakText("Imagem baixada e texto copiado para a área de transferência. Compartilhe com seus amigos nas redes sociais.");
             }
         }).catch(err => {
             console.error("Failed to copy text: ", err);
-            showToast("Não foi possível copiar o texto.");
+            showToast("Imagem baixada para o seu dispositivo.");
         });
+    }
+
+    function generateShareImage(point, callback) {
+        const canvas = document.createElement('canvas');
+        canvas.width = 600;
+        canvas.height = 600;
+        const ctx = canvas.getContext('2d');
+
+        // Background
+        ctx.fillStyle = '#0f172a';
+        ctx.fillRect(0, 0, 600, 600);
+
+        // Border Accent
+        ctx.strokeStyle = '#10b981';
+        ctx.lineWidth = 8;
+        ctx.strokeRect(10, 10, 580, 580);
+
+        // Header logo
+        ctx.fillStyle = '#10b981';
+        ctx.font = 'bold 22px Arial, sans-serif';
+        ctx.fillText('🍃 EcoPontos Bandeirantes', 40, 55);
+
+        // Draw map pin icon decoration
+        ctx.fillStyle = '#ef4444';
+        ctx.beginPath();
+        ctx.arc(520, 70, 15, 0, Math.PI * 2);
+        ctx.fill();
+        ctx.beginPath();
+        ctx.moveTo(505, 70);
+        ctx.lineTo(520, 100);
+        ctx.lineTo(535, 70);
+        ctx.fill();
+        ctx.fillStyle = '#ffffff';
+        ctx.beginPath();
+        ctx.arc(520, 70, 6, 0, Math.PI * 2);
+        ctx.fill();
+
+        // Divider
+        ctx.strokeStyle = 'rgba(255, 255, 255, 0.1)';
+        ctx.lineWidth = 2;
+        ctx.beginPath();
+        ctx.moveTo(40, 110);
+        ctx.lineTo(560, 110);
+        ctx.stroke();
+
+        // Point Title
+        ctx.fillStyle = '#ffffff';
+        ctx.font = 'bold 24px Arial, sans-serif';
+        ctx.fillText(point.name, 40, 155);
+
+        // Address
+        ctx.fillStyle = '#94a3b8';
+        ctx.font = '15px Arial, sans-serif';
+        const addressWords = point.address.split(' ');
+        let line = '';
+        let y = 195;
+        for (let n = 0; n < addressWords.length; n++) {
+            let testLine = line + addressWords[n] + ' ';
+            let metrics = ctx.measureText(testLine);
+            if (metrics.width > 500 && n > 0) {
+                ctx.fillText(line, 40, y);
+                line = addressWords[n] + ' ';
+                y += 22;
+            } else {
+                line = testLine;
+            }
+        }
+        ctx.fillText(line, 40, y);
+        y += 35;
+
+        // Info
+        ctx.fillStyle = '#f59e0b';
+        ctx.font = 'bold 15px Arial, sans-serif';
+        ctx.fillText(`🕒 Funcionamento: ${point.hours}`, 40, y);
+        y += 24;
+        ctx.fillStyle = '#10b981';
+        ctx.fillText(`📞 Contato: ${point.phone}`, 40, y);
+        y += 40;
+
+        // Allowed Items
+        ctx.fillStyle = '#10b981';
+        ctx.font = 'bold 16px Arial, sans-serif';
+        ctx.fillText('✔️ Itens Permitidos:', 40, y);
+        y += 25;
+        ctx.fillStyle = '#f8fafc';
+        ctx.font = '14px Arial, sans-serif';
+        point.allowed.slice(0, 4).forEach(item => {
+            ctx.fillText(`• ${item}`, 50, y);
+            y += 22;
+        });
+        y += 20;
+
+        // Not Allowed Items
+        ctx.fillStyle = '#ef4444';
+        ctx.font = 'bold 16px Arial, sans-serif';
+        ctx.fillText('❌ Não Permitido:', 40, y);
+        y += 25;
+        ctx.fillStyle = '#94a3b8';
+        ctx.font = '14px Arial, sans-serif';
+        point.notAllowed.slice(0, 4).forEach(item => {
+            ctx.fillText(`• ${item}`, 50, y);
+            y += 22;
+        });
+
+        canvas.toBlob(callback, 'image/png');
+    }
+
+    function generateSimulatorShareImage(metrics, callback) {
+        const canvas = document.createElement('canvas');
+        canvas.width = 600;
+        canvas.height = 600;
+        const ctx = canvas.getContext('2d');
+
+        ctx.fillStyle = '#0f172a';
+        ctx.fillRect(0, 0, 600, 600);
+
+        ctx.strokeStyle = '#10b981';
+        ctx.lineWidth = 8;
+        ctx.strokeRect(10, 10, 580, 580);
+
+        ctx.fillStyle = '#10b981';
+        ctx.font = 'bold 22px Arial, sans-serif';
+        ctx.fillText('🍃 Meu Impacto Ecológico Estimado', 40, 55);
+
+        ctx.strokeStyle = 'rgba(255, 255, 255, 0.1)';
+        ctx.lineWidth = 2;
+        ctx.beginPath();
+        ctx.moveTo(40, 95);
+        ctx.lineTo(560, 95);
+        ctx.stroke();
+
+        ctx.fillStyle = '#94a3b8';
+        ctx.font = '15px Arial, sans-serif';
+        ctx.fillText('Simulado através do portal EcoPontos Bandeirantes - PR', 40, 130);
+
+        ctx.fillStyle = '#ffffff';
+        ctx.font = 'bold 18px Arial, sans-serif';
+        ctx.fillText('Resultados da minha reciclagem:', 40, 185);
+
+        let y = 235;
+
+        const drawMetric = (value, label, color) => {
+            ctx.fillStyle = color;
+            ctx.font = 'bold 20px Arial, sans-serif';
+            ctx.fillText(value, 50, y);
+            ctx.fillStyle = '#94a3b8';
+            ctx.font = '14px Arial, sans-serif';
+            ctx.fillText(label, 50, y + 20);
+            y += 62;
+        };
+
+        drawMetric(metrics.weight, 'de peso total em lixo eletrônico reciclado', '#10b981');
+        drawMetric(metrics.water, 'de água potável protegida contra contaminação', '#f59e0b');
+        drawMetric(metrics.soil, 'de solo livre de chumbo, mercúrio e metais pesados', '#ef4444');
+        drawMetric(metrics.degradation, 'de tempo de degradação evitado no meio ambiente', '#10b981');
+        drawMetric(metrics.recovery, 'de tempo de recuperação economizado em ecossistemas', '#06b6d4');
+
+        ctx.fillStyle = '#10b981';
+        ctx.font = 'bold 15px Arial, sans-serif';
+        ctx.fillText('Calcule o seu também e ajude Bandeirantes!', 40, 555);
+
+        canvas.toBlob(callback, 'image/png');
     }
 
     // Share point of descarte click delegation
@@ -937,8 +1125,10 @@ document.addEventListener('DOMContentLoaded', () => {
             const pointId = parseInt(shareBtn.getAttribute('data-id'));
             const point = pointsData.find(p => p.id === pointId);
             if (point) {
-                const shareText = `Encontrei um ponto de coleta de lixo eletrônico em Bandeirantes! EcoPonto: ${point.name} no endereço: ${point.address}. Funcionamento: ${point.hours}.`;
-                shareContent(point.name, shareText);
+                generateShareImage(point, (blob) => {
+                    const shareText = `Encontrei um ponto de coleta de lixo eletrônico em Bandeirantes! EcoPonto: ${point.name} no endereço: ${point.address}. Funcionamento: ${point.hours}.`;
+                    shareImage(blob, `ecoponto_${pointId}.png`, point.name, shareText);
+                });
             }
         }
     });
@@ -950,22 +1140,164 @@ document.addEventListener('DOMContentLoaded', () => {
             const weightText = document.getElementById('metric-weight').textContent;
             const waterText = document.getElementById('metric-water').textContent;
             const soilText = document.getElementById('metric-soil').textContent;
+            const degradationText = document.getElementById('metric-degradation').textContent;
             const recoveryText = document.getElementById('metric-recovery').textContent;
-            
-            const shareText = `Fiz a simulação no EcoPontos Bandeirantes! Descartando meu lixo eletrônico corretamente, vou ajudar a reciclar ${weightText}, salvar ${waterText} de água limpa e proteger ${soilText} de solo contra contaminação! Pouparemos ${recoveryText} de recuperação na natureza. Faça sua parte você também!`;
-            
-            shareContent("Meu Impacto Ecológico - EcoPontos", shareText);
+
+            const metrics = {
+                weight: weightText,
+                water: waterText,
+                soil: soilText,
+                degradation: degradationText,
+                recovery: recoveryText
+            };
+
+            generateSimulatorShareImage(metrics, (blob) => {
+                const shareText = `Fiz a simulação no EcoPontos Bandeirantes! Descartando meu lixo eletrônico corretamente, vou ajudar a reciclar ${weightText}, salvar ${waterText} de água e proteger ${soilText} de solo! Pouparemos ${recoveryText} de recuperação na natureza. Faça sua parte!`;
+                shareImage(blob, 'meu_impacto.png', 'Meu Impacto Ecológico - EcoPontos', shareText);
+            });
         });
     }
 
-    // Share graphs data click handler
-    const btnShareGraphs = document.getElementById('btn-share-graphs');
-    if (btnShareGraphs) {
-        btnShareGraphs.addEventListener('click', () => {
-            const shareText = `Dados de Sustentabilidade - EcoPontos Bandeirantes:\n` +
-                              `- Histórico de Descarte Mensal: Jan (1.200 kg), Fev (1.450 kg), Mar (1.100 kg), Abr (1.850 kg), Mai (2.200 kg), Jun (2.650 kg).\n` +
-                              `- Materiais Recuperados: Plásticos (42%), Metais Ferrosos (35%), Cobre (12%), Alumínio (8%), Metais Preciosos (3%).`;
-            shareContent("Dados de Sustentabilidade - EcoPontos", shareText);
+    function exportChartWithBackgroundAndValues(chart, title, valuesList, callback) {
+        const chartCanvas = chart.canvas;
+        const tempCanvas = document.createElement('canvas');
+        tempCanvas.width = 600;
+        const ctx = tempCanvas.getContext('2d');
+        ctx.font = 'bold 15px Arial, sans-serif';
+        
+        const margin = 40;
+        const maxWidth = tempCanvas.width - (margin * 2);
+        
+        let currentY = 35;
+        const words = title.split(' ');
+        let testLine = '';
+        let titleLines = 1;
+        for (let n = 0; n < words.length; n++) {
+            let line = testLine + words[n] + ' ';
+            if (ctx.measureText(line).width > maxWidth && n > 0) {
+                titleLines++;
+                testLine = words[n] + ' ';
+            } else {
+                testLine = line;
+            }
+        }
+        
+        const topPadding = 40 + (titleLines * 22);
+        const targetWidth = 520;
+        const targetHeight = chartCanvas.height * (targetWidth / chartCanvas.width);
+        const bottomPadding = 40 + (valuesList.length * 20);
+        tempCanvas.height = targetHeight + topPadding + bottomPadding;
+        
+        // 1. Fill solid background (Slate 900)
+        ctx.fillStyle = '#0f172a';
+        ctx.fillRect(0, 0, tempCanvas.width, tempCanvas.height);
+        
+        // Border Accent
+        ctx.strokeStyle = '#10b981';
+        ctx.lineWidth = 6;
+        ctx.strokeRect(3, 3, tempCanvas.width - 6, tempCanvas.height - 6);
+        
+        // 2. Draw Title
+        ctx.fillStyle = '#10b981';
+        ctx.font = 'bold 15px Arial, sans-serif';
+        ctx.textAlign = 'center';
+        
+        testLine = '';
+        for (let n = 0; n < words.length; n++) {
+            let line = testLine + words[n] + ' ';
+            if (ctx.measureText(line).width > maxWidth && n > 0) {
+                ctx.fillText(testLine, tempCanvas.width / 2, currentY);
+                testLine = words[n] + ' ';
+                currentY += 22;
+            } else {
+                testLine = line;
+            }
+        }
+        ctx.fillText(testLine, tempCanvas.width / 2, currentY);
+        
+        // Divider
+        ctx.strokeStyle = 'rgba(255, 255, 255, 0.1)';
+        ctx.lineWidth = 1;
+        ctx.beginPath();
+        ctx.moveTo(30, topPadding - 15);
+        ctx.lineTo(tempCanvas.width - 30, topPadding - 15);
+        ctx.stroke();
+        
+        // 3. Draw Chart Canvas centered horizontally
+        ctx.drawImage(chartCanvas, 40, topPadding, targetWidth, targetHeight);
+        
+        // 4. Draw Divider before values
+        let y = topPadding + targetHeight + 25;
+        ctx.strokeStyle = 'rgba(255, 255, 255, 0.1)';
+        ctx.lineWidth = 1;
+        ctx.beginPath();
+        ctx.moveTo(30, y - 12);
+        ctx.lineTo(tempCanvas.width - 30, y - 12);
+        ctx.stroke();
+        
+        // 5. Draw Values list at the bottom
+        ctx.fillStyle = '#ffffff';
+        ctx.font = 'bold 15px Arial, sans-serif';
+        ctx.textAlign = 'left';
+        ctx.fillText('Valores Detalhados:', 40, y);
+        y += 22;
+        
+        ctx.fillStyle = '#94a3b8';
+        ctx.font = '14px Arial, sans-serif';
+        valuesList.forEach(val => {
+            ctx.fillText(val, 50, y);
+            y += 20;
+        });
+        
+        tempCanvas.toBlob(callback, 'image/png');
+    }
+
+    // Share chart collected collectedChart click handler
+    const btnShareChartCollected = document.getElementById('btn-share-chart-collected');
+    if (btnShareChartCollected) {
+        btnShareChartCollected.addEventListener('click', () => {
+            if (!collectedChart) return;
+            const values = [
+                'Janeiro: 1.200 kg',
+                'Fevereiro: 1.450 kg',
+                'Março: 1.100 kg',
+                'Abril: 1.850 kg',
+                'Maio: 2.200 kg',
+                'Junho: 2.650 kg'
+            ];
+            exportChartWithBackgroundAndValues(
+                collectedChart,
+                'Histórico de Descarte Mensal em Bandeirantes (Simulação)',
+                values,
+                (blob) => {
+                    const shareText = `Histórico de Descarte Mensal em Bandeirantes (Simulação) - Valores: Jan (1.200 kg), Fev (1.450 kg), Mar (1.100 kg), Abr (1.850 kg), Mai (2.200 kg), Jun (2.650 kg). Total de 12.8 toneladas acumuladas!`;
+                    shareImage(blob, 'historico_descarte.png', 'Histórico de Descarte Mensal - EcoPontos', shareText);
+                }
+            );
+        });
+    }
+
+    // Share chart materials materialsChart click handler
+    const btnShareChartMaterials = document.getElementById('btn-share-chart-materials');
+    if (btnShareChartMaterials) {
+        btnShareChartMaterials.addEventListener('click', () => {
+            if (!materialsChart) return;
+            const values = [
+                'Plásticos: 42%',
+                'Metais Ferrosos: 35%',
+                'Cobre: 12%',
+                'Alumínio: 8%',
+                'Metais Preciosos (Ouro e Prata): 3%'
+            ];
+            const titleText = 'Gráfico de pizza mostrando materiais recuperados por reciclagem: Plásticos 42%, Metais Ferrosos 35%, Cobre 12%, Alumínio 8%, Metais Preciosos (Ouro e Prata) 3%';
+            exportChartWithBackgroundAndValues(
+                materialsChart,
+                titleText,
+                values,
+                (blob) => {
+                    shareImage(blob, 'materiais_recuperados.png', 'Materiais Recuperados por Reciclagem - EcoPontos', titleText);
+                }
+            );
         });
     }
 
